@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.2';
+    const VERSION = '0.0.3';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -81,9 +81,6 @@ class Router
     private function matchExact()
     {
         foreach ($this->routing as $routeId => $route) { // Find exact match
-            if ($this->uriCount !== count($route)) {
-                continue; // match failed - not same size
-            }
             if ($this->uri === $route) {
                 return $this->controls[$routeId]; // matched - exact match
             }
@@ -96,11 +93,8 @@ class Router
     private function matchVariable()
     {
         foreach ($this->routing as $routeId => $route) { // Find variable match
-            if ($this->uriCount !== count($route)) {
-                continue; // match failed - not same size
-            }
-            if (!in_array('?', $route)) {
-                continue; // match failed - no variable matches defined
+            if (!in_array('?', $route) || $this->uriCount !== count($route)) {
+                continue; // match failed - no variable matches defined, or not same size
             }
             $this->vars = [];
             foreach ($route as $arrayId => $dir) {
@@ -113,7 +107,7 @@ class Router
                 }
             }
             if (!empty($this->vars)) {
-                return $controls[$routeId]; // matched - variable match
+                return $this->controls[$routeId]; // matched - variable match
             }
         }
     }
