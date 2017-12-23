@@ -35,7 +35,6 @@ class Router
             'control' => $control,
             'route' => $this->trimArray(explode('/', $route)),
         ];
-
     }
 
     /**
@@ -47,7 +46,7 @@ class Router
         $controls = array_column($this->routes, 'control');
         $routes = array_column($this->routes, 'route');
         $uriCount = count($this->uri);
-        foreach($routes as $routeId => $route) { // Find exact match
+        foreach ($routes as $routeId => $route) { // Find exact match
             if ($uriCount !== count($route)) {
                 continue; // match failed - not same size
             }
@@ -55,7 +54,7 @@ class Router
                 return $controls[$routeId]; // matched - exact match
             }
         }
-        foreach($routes as $routeId => $route) { // Find variable match
+        foreach ($routes as $routeId => $route) { // Find variable match
             if ($uriCount !== count($route)) {
                 continue; // match failed - not same size
             }
@@ -63,7 +62,7 @@ class Router
                 continue; // match failed - no variable matches defined
             }
             $this->vars = [];
-            foreach($route as $arrayId => $dir) {
+            foreach ($route as $arrayId => $dir) {
                 if ($dir !== '?' && $dir !== $this->uri[$arrayId]) {
                     $this->vars = [];
                     break; // match failed - no exact match, no variable match
