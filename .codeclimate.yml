@@ -1,0 +1,62 @@
+# attogram/router - codeclimate.yml - v0.0.1
+version: "2"
+exclude_patterns:
+- "vendor/"
+plugins:
+  phpcodesniffer:
+    enabled: true
+    config:
+      file_extensions: "php"
+      standard: "PSR1,PSR2"
+  phpmd:
+    enabled: true
+    checks:
+      CleanCode/StaticAccess: # allow Object::method()
+        enabled: false
+      Controversial/Superglobals: # allow $_SERVER in getServer()
+        enabled: false
+      Design/DevelopmentCodeFragment: # allow print_r()
+        enabled: false
+  phan:
+    enabled: true
+    checks:
+      PhanTypeMismatchArgument:
+        enabled: false
+      PhanTypeMismatchForeach:
+        enabled: false       
+      PhanTypeMismatchProperty:
+        enabled: false
+      PhanUndeclaredClass:
+        enabled: false
+      PhanUndeclaredClassCatch:
+        enabled: false
+      PhanUndeclaredClassConstant:
+        enabled: false
+      PhanUndeclaredClassInstanceof:
+        enabled: false
+      PhanUndeclaredClassMethod:
+        enabled: false
+      PhanUndeclaredExtendedClass:
+        enabled: false
+      PhanUndeclaredInterface:
+        enabled: false
+      PhanUndeclaredMethod:
+        enabled: false
+      PhanUndeclaredProperty:
+        enabled: false
+      PhanUndeclaredTypeParameter:
+        enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+        php:
+          mass_threshold: 38
+  csslint:
+    enabled: true
+  stylelint:
+    enabled: true
+  fixme:
+    enabled: true
+  git-legal:
+    enabled: true

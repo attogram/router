@@ -1,0 +1,21 @@
+{
+    "name": "attogram/router",
+    "description": "Attogram Router",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/attogram/router",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Attogram\\Router\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    }
+}
