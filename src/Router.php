@@ -80,7 +80,7 @@ class Router
      */
     private function matchExact()
     {
-        foreach ($this->routing as $routeId => $route) { // Find exact match
+        foreach ($this->routing as $routeId => $route) {
             if ($this->uri === $route) {
                 return $this->controls[$routeId]; // matched - exact match
             }
@@ -92,22 +92,30 @@ class Router
      */
     private function matchVariable()
     {
-        foreach ($this->routing as $routeId => $route) { // Find variable match
+        foreach ($this->routing as $routeId => $route) {
             if (!in_array('?', $route) || $this->uriCount !== count($route)) {
                 continue; // match failed - no variable matches defined, or not same size
             }
-            $this->vars = [];
-            foreach ($route as $arrayId => $dir) {
-                if ($dir !== '?' && $dir !== $this->uri[$arrayId]) {
-                    $this->vars = [];
-                    break; // match failed - no exact match, no variable match
-                }
-                if ($dir === '?') { // found a variable
-                    $this->vars[] = $this->uri[$arrayId];
-                }
-            }
+            $this->matchVariableSetVars($route);
             if (!empty($this->vars)) {
                 return $this->controls[$routeId]; // matched - variable match
+            }
+        }
+    }
+
+    /**
+     * @param array $route
+     */
+    private function matchVariableSetVars($route)
+    {
+        $this->vars = [];
+        foreach ($route as $arrayId => $dir) {
+            if ($dir !== '?' && $dir !== $this->uri[$arrayId]) {
+                $this->vars = [];
+                break; // match failed - no exact match, no variable match
+            }
+            if ($dir === '?') { // found a variable
+                $this->vars[] = $this->uri[$arrayId];
             }
         }
     }
