@@ -96,7 +96,7 @@ class Router
     private function matchVariable()
     {
         foreach ($this->routing as $routeId => $route) { // Find variable match
-            if (this->uriCount !== count($route)) {
+            if ($this->uriCount !== count($route)) {
                 continue; // match failed - not same size
             }
             if (!in_array('?', $route)) {
