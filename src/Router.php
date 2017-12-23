@@ -7,12 +7,15 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.1';
+    const VERSION = '0.0.2';
 
     private $uriBase = '';
     private $uriRelative = '';
     private $uri = [];
+    private $uriCount = 0;
     private $routes = [];
+    private $routing = [];
+    private $controls = [];
     private $vars = [];
 
 
@@ -22,6 +25,22 @@ class Router
     public function __construct()
     {
         $this->setUri();
+    }
+
+    /**
+     * @return void
+     */
+    private function setUri()
+    {
+        $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
+        $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query
+        $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
+        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
+        $this->uri =$this->trimArray(explode('/', $this->uriRelative)); // make uri list
+        if (preg_match('#/$#', $this->uriRelative)) { // If relative URI has slash at end
+            return; // all is OK
+        }
+        $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
     }
 
     /**
@@ -43,19 +62,41 @@ class Router
      */
     public function match()
     {
-        $controls = array_column($this->routes, 'control');
-        $routes = array_column($this->routes, 'route');
-        $uriCount = count($this->uri);
-        foreach ($routes as $routeId => $route) { // Find exact match
-            if ($uriCount !== count($route)) {
+        $this->controls = array_column($this->routes, 'control');
+        $this->routing = array_column($this->routes, 'route');
+        $this->uriCount = count($this->uri);
+        $control = $this->matchExact();
+        if ($control) {
+            return $control;
+        }
+        $control = $this->matchVariable();
+        if ($control) {
+            return $control;
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    private function matchExact()
+    {
+        foreach ($this->routing as $routeId => $route) { // Find exact match
+            if ($this->uriCount !== count($route)) {
                 continue; // match failed - not same size
             }
             if ($this->uri === $route) {
-                return $controls[$routeId]; // matched - exact match
+                return $this->controls[$routeId]; // matched - exact match
             }
         }
-        foreach ($routes as $routeId => $route) { // Find variable match
-            if ($uriCount !== count($route)) {
+    }
+
+    /**
+     * @return string|null
+     */
+    private function matchVariable()
+    {
+        foreach ($this->routing as $routeId => $route) { // Find variable match
+            if (this->uriCount !== count($route)) {
                 continue; // match failed - not same size
             }
             if (!in_array('?', $route)) {
@@ -99,22 +140,6 @@ class Router
     public function getVars()
     {
         return $this->vars;
-    }
-
-    /**
-     * @return void
-     */
-    private function setUri()
-    {
-        $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
-        $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query
-        $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
-        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        $this->uri =$this->trimArray(explode('/', $this->uriRelative)); // make uri list
-        if (preg_match('#/$#', $this->uriRelative)) { // If relative URI has slash at end
-            return; // all is OK
-        }
-        $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
     }
 
     /**
