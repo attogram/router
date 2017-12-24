@@ -22,8 +22,8 @@ class Router
 
     /**
      * __construct
-	 * Sets: ->uriBase, ->uriRelative, ->uri, and ->uriCount
-	 * Redirects to proper URL if no slash found at end of current URL
+     * Sets: ->uriBase, ->uriRelative, ->uri, and ->uriCount
+     * Redirects to proper URL if no slash found at end of current URL
      * @return void
      */
     public function __construct()
@@ -33,11 +33,10 @@ class Router
         $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
         $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
         $this->uri =$this->trimArray(explode('/', $this->uriRelative)); // make uri list
-		$this->uriCount = count($this->uri);
+        $this->uriCount = count($this->uri);
         if (1 !== preg_match('#/$#', $this->uriRelative)) { // If relative URI has no slash at end
             $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
         }
-        
     }
 
     /**
