@@ -5,7 +5,7 @@ exclude_patterns:
 checks:
   method-complexity:
     config:
-      threshold: 6  # original 5
+      threshold: 5 # default: 5
 plugins:
   phpcodesniffer:
     enabled: true

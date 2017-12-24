@@ -7,13 +7,13 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.6';
+    const VERSION = '0.0.7';
 
     private $uriBase = '';
     private $uriRelative = '';
     private $uri = [];
     private $uriCount = 0;
-    private $routes = [];
+    private $allow = [];
     private $routesExact = [];
     private $routesVariable = [];
     private $controls = [];
@@ -47,7 +47,7 @@ class Router
      */
     public function allow(string $route, string $control)
     {
-        $this->routes[] = [
+        $this->allow[] = [
             'control' => $control,
             'route' => $this->trimArray(explode('/', $route)),
         ];
@@ -59,7 +59,7 @@ class Router
      */
     public function match()
     {
-        $this->controls = array_column($this->routes, 'control');
+        $this->controls = array_column($this->allow, 'control');
         $this->setRoutingTypes();
         if ($this->matchExact()) {
             return $this->control;
@@ -70,12 +70,18 @@ class Router
     }
 
     /**
-     * split ->routing into ->routesExact and ->routesVariable
+     * sets ->routesExact and ->routesVariable
      * @return void
      */
     private function setRoutingTypes()
     {
-        foreach (array_column($this->routes, 'route') as $routeId => $route) {
+		$possibleRoutes = [];
+		foreach (array_column($this->allow, 'route') as $routeId => $route) {
+            if ($this->uriCount === count($route)) { // 
+                $possibleRoutes[$routeId] = $route;
+            }
+		}
+        foreach ($possibleRoutes as $routeId => $route) {
             if (in_array('?', $route)) {
                 $this->routesVariable[$routeId] = $route;
                 continue;
@@ -104,9 +110,6 @@ class Router
     private function matchVariable()
     {
         foreach ($this->routesVariable as $routeId => $route) {
-            if ($this->uriCount !== count($route)) {
-                continue; // match failed - not same size
-            }
             $this->matchVariableVars($route);
             if (!empty($this->vars)) {
                 $this->control = $this->controls[$routeId]; // matched - variable match
