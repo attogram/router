@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.7';
+    const VERSION = '0.0.8';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -60,7 +60,7 @@ class Router
     public function match()
     {
         $this->controls = array_column($this->allow, 'control');
-        $this->setRoutingTypes();
+        $this->setRouting();
         if ($this->matchExact()) {
             return $this->control;
         }
@@ -70,21 +70,34 @@ class Router
     }
 
     /**
-     * sets ->routesExact and ->routesVariable
+     * Sets ->routesExact and ->routesVariable
      * @return void
      */
-    private function setRoutingTypes()
+    private function setRouting()
     {
-        foreach (array_column($this->allow, 'route') as $routeId => $route) {
-            if ($this->uriCount !== count($route)) {
-                continue;
-            }
+        $possibleRoutes = $this->trimRoutesByUriSize();
+        foreach ($possibleRoutes as $routeId => $route) {
             if (in_array('?', $route)) {
                 $this->routesVariable[$routeId] = $route;
                 continue;
             }
             $this->routesExact[$routeId] = $route;
         }
+    }
+
+    /**
+     * Get an array of routes that are the same size as the current URI
+     * @return array
+     */
+    private function trimRoutesByUriSize()
+    {
+        $routes = [];
+        foreach (array_column($this->allow, 'route') as $routeId => $route) {
+            if ($this->uriCount === count($route)) {
+                $routes[$routeId] = $route;
+            }
+        }
+        return $routes;
     }
 
     /**
