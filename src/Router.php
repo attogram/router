@@ -75,13 +75,10 @@ class Router
      */
     private function setRoutingTypes()
     {
-		$possibleRoutes = [];
-		foreach (array_column($this->allow, 'route') as $routeId => $route) {
-            if ($this->uriCount === count($route)) { // 
-                $possibleRoutes[$routeId] = $route;
+        foreach (array_column($this->allow, 'route') as $routeId => $route) {
+			if ($this->uriCount !== count($route)) {
+                continue;
             }
-		}
-        foreach ($possibleRoutes as $routeId => $route) {
             if (in_array('?', $route)) {
                 $this->routesVariable[$routeId] = $route;
                 continue;
