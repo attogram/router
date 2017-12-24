@@ -1,10 +1,18 @@
 # Attogram Router
 
-The Attogram Router is a small PHP router. 
+The Attogram Router is a small PHP router.
 
 ## Example usage:
 
 ```php
+/* Setup URL rewriting, example .htaccess:
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
+*/
+
 use Attogram\Router\Router;
 
 require_once('../vendor/autoload.php');
@@ -28,7 +36,7 @@ $router->allow('/test/?/test/?/',       'ControllerTestVariableTest2');
 $control  = $router->match(); // Get the controller name for this request
 
 if (!$control) {
-	// handle 404 Not Found
+    // handle 404 Not Found
 }
 
 $base     = $router->getUriBase(); // Get the Base URI for this request:  http://example.com
