@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.3';
+    const VERSION = '0.0.4';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -82,7 +82,7 @@ class Router
      */
     private function setRoutingTypes()
     {
-        foreach (array_column($this->routes, 'route'); as $routeId => $route) {
+        foreach (array_column($this->routes, 'route') as $routeId => $route) {
             if (in_array('?', $route)) {
                 $this->routesVariable[$routeId] = $route;
                 continue;
