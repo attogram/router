@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.5';
+    const VERSION = '0.0.6';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -17,6 +17,7 @@ class Router
     private $routesExact = [];
     private $routesVariable = [];
     private $controls = [];
+    private $control = '';
     private $vars = [];
 
 
@@ -60,13 +61,11 @@ class Router
     {
         $this->controls = array_column($this->routes, 'control');
         $this->setRoutingTypes();
-        $control = $this->matchExact();
-        if ($control) {
-            return $control;
+        if ($this->matchExact()) {
+            return $this->control;
         }
-        $control = $this->matchVariable();
-        if ($control) {
-            return $control;
+        if ($this->matchVariable()) {
+            return $this->control;
         }
     }
 
@@ -86,19 +85,21 @@ class Router
     }
 
     /**
-     * @return string|null
+     * @return bool
      */
     private function matchExact()
     {
         foreach ($this->routesExact as $routeId => $route) {
             if ($this->uri === $route) {
-                return $this->controls[$routeId]; // matched - exact match
+                $this->control = $this->controls[$routeId]; // matched - exact match
+                return true;
             }
         }
+        return false;
     }
 
     /**
-     * @return string|null
+     * @return bool
      */
     private function matchVariable()
     {
@@ -108,9 +109,11 @@ class Router
             }
             $this->matchVariableVars($route);
             if (!empty($this->vars)) {
-                return $this->controls[$routeId]; // matched - variable match
+                $this->control = $this->controls[$routeId]; // matched - variable match
+                return true;
             }
         }
+        return false;
     }
 
     /**
