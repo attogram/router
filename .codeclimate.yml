@@ -2,6 +2,10 @@
 version: "2"
 exclude_patterns:
 - "vendor/"
+checks:
+  method-complexity:
+    config:
+      threshold: 6  # original 5
 plugins:
   phpcodesniffer:
     enabled: true
