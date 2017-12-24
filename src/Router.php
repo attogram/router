@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.8';
+    const VERSION = '0.0.9';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -86,7 +86,7 @@ class Router
     }
 
     /**
-     * Get an array of routes that are the same size as the current URI
+     * Get an array of allowed routes that are the same size as the current URI
      * @return array
      */
     private function trimRoutesByUriSize()

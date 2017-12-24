@@ -1,11 +1,11 @@
-# attogram/router - codeclimate.yml - v0.0.1
+# attogram/router - codeclimate.yml - v0.0.2
 version: "2"
 exclude_patterns:
 - "vendor/"
 checks:
   method-complexity:
     config:
-      threshold: 5 # default: 5
+      threshold: 6 # default: 5
 plugins:
   phpcodesniffer:
     enabled: true
