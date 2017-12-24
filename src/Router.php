@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.4';
+    const VERSION = '0.0.5';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -22,26 +22,22 @@ class Router
 
     /**
      * __construct
-     */
-    public function __construct()
-    {
-        $this->setUri();
-    }
-
-    /**
+	 * Sets: ->uriBase, ->uriRelative, ->uri, and ->uriCount
+	 * Redirects to proper URL if no slash found at end of current URL
      * @return void
      */
-    private function setUri()
+    public function __construct()
     {
         $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
         $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query
         $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
         $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
         $this->uri =$this->trimArray(explode('/', $this->uriRelative)); // make uri list
-        if (preg_match('#/$#', $this->uriRelative)) { // If relative URI has slash at end
-            return; // all is OK
+		$this->uriCount = count($this->uri);
+        if (1 !== preg_match('#/$#', $this->uriRelative)) { // If relative URI has no slash at end
+            $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
         }
-        $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
+        
     }
 
     /**
@@ -63,7 +59,6 @@ class Router
      */
     public function match()
     {
-        $this->uriCount = count($this->uri);
         $this->controls = array_column($this->routes, 'control');
         $this->setRoutingTypes();
         $control = $this->matchExact();
@@ -112,7 +107,7 @@ class Router
             if ($this->uriCount !== count($route)) {
                 continue; // match failed - not same size
             }
-            $this->matchVariableSetVars($route);
+            $this->matchVariableVars($route);
             if (!empty($this->vars)) {
                 return $this->controls[$routeId]; // matched - variable match
             }
@@ -123,7 +118,7 @@ class Router
      * @param array $route
      * @return void
      */
-    private function matchVariableSetVars($route)
+    private function matchVariableVars($route)
     {
         $this->vars = [];
         foreach ($route as $arrayId => $dir) {

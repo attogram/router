@@ -1,4 +1,4 @@
-<?php // attogram router  index.php  v0.0.1
+<?php // attogram router  index.php  v0.0.2
 
 use Attogram\Router\Router;
 
@@ -26,19 +26,20 @@ $relative = $router->getUriRelative();
 $full     = $base . $relative;
 $vars     = $router->getVars();
 
+$title = 'Attogram Router v' . $router::VERSION;
 
-?><html><head><title>Attogram Router Test</title><style type="text/css">
+?><html><head><title><?= $title; ?></title><style type="text/css">
 body { background-color:lightgrey; color:black; font-family:monospace; }
 a:hover, a:active { background-color:yellow; }
 h1 { display:inline; }
 li { line-height:150%; }
 .pre { white-space:pre; line-height:150%; }
 .box { font-weight:bold; padding:0 4px 0 4px; display:inline; }
-.empty { background-color:darkred; color:yellow;  }
+.empty { background-color:darkred; color:yellow; }
 .good { background-color:darkgreen; color:yellow; }
 .vars { display:block; }
 </style></head><body>
-<h1>Attogram Router Test</h1>
+<h1><?= $title; ?></h1>
 <p class="pre">control  : <?php
     echo !empty($control)
         ? '<span class="box good">' . $control . '</span>'
@@ -69,4 +70,9 @@ vars     : <?php
     <li><a href="<?= $base; ?>/test/FOO/test/BAR/BAZ/"><?= $base; ?>/test/FOO/test/BAR/BAZ/</a></li>
     <li><a href="<?= $base; ?>/404/"><?= $base; ?>/404/</a></li>
 </ol>
+<hr />
+<?= $title; ?> 
+- <a target="_blank" href="https://github.com/attogram/router">github</a>
+- <a target="_blank" href="https://codeclimate.com/github/attogram/router">codeclimate</a>
+- <?= date('r'); ?>
 </body></html>
