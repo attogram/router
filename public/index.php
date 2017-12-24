@@ -73,6 +73,7 @@ vars     : <?php
 <hr />
 <?= $title; ?> 
 - <a target="_blank" href="https://github.com/attogram/router">github</a>
+- <a target="_blank" href="https://packagist.org/packages/attogram/router">packagist</a>
 - <a target="_blank" href="https://codeclimate.com/github/attogram/router">codeclimate</a>
 - <?= date('r'); ?>
 </body></html>
