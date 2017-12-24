@@ -87,7 +87,7 @@ class Router
                 $this->routesVariable[$routeId] = $route;
                 continue;
             }
-            $this->routesExact[$routeId] = route;
+            $this->routesExact[$routeId] = $route;
         }
     }
 
