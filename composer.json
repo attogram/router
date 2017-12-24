@@ -1,6 +1,6 @@
 {
     "name": "attogram/router",
-    "description": "Attogram Router",
+    "description": "The Attogram Router is a small PHP router.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/attogram/router",
