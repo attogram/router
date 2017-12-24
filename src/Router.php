@@ -76,7 +76,7 @@ class Router
     private function setRoutingTypes()
     {
         foreach (array_column($this->allow, 'route') as $routeId => $route) {
-			if ($this->uriCount !== count($route)) {
+            if ($this->uriCount !== count($route)) {
                 continue;
             }
             if (in_array('?', $route)) {
