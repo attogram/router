@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.9';
+    const VERSION = '0.0.10';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -70,13 +70,12 @@ class Router
     }
 
     /**
-     * Sets ->routesExact and ->routesVariable
+     * Split routes into ->routesExact and ->routesVariable
      * @return void
      */
     private function setRouting()
     {
-        $possibleRoutes = $this->trimRoutesByUriSize();
-        foreach ($possibleRoutes as $routeId => $route) {
+        foreach ($this->trimRoutesByUriSize() as $routeId => $route) {
             if (in_array('?', $route)) {
                 $this->routesVariable[$routeId] = $route;
                 continue;
@@ -101,6 +100,7 @@ class Router
     }
 
     /**
+     * Match URI to an exact route
      * @return bool
      */
     private function matchExact()
@@ -115,6 +115,7 @@ class Router
     }
 
     /**
+     * Match URI to a variable route
      * @return bool
      */
     private function matchVariable()
@@ -130,6 +131,7 @@ class Router
     }
 
     /**
+     * Set ->vars[] if a variable match is found
      * @param array $route
      * @return void
      */
@@ -145,30 +147,6 @@ class Router
                 $this->vars[] = $this->uri[$arrayId];
             }
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getUriBase()
-    {
-        return $this->uriBase;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUriRelative()
-    {
-        return $this->uriRelative;
-    }
-
-    /**
-     * @return array
-     */
-    public function getVars()
-    {
-        return $this->vars;
     }
 
     /**
@@ -208,5 +186,28 @@ class Router
         if (!empty($_SERVER[$name])) {
             return $_SERVER[$name];
         }
+    }
+    /**
+     * @return string
+     */
+    public function getUriBase()
+    {
+        return $this->uriBase;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUriRelative()
+    {
+        return $this->uriRelative;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVars()
+    {
+        return $this->vars;
     }
 }
