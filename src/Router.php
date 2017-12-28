@@ -7,7 +7,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.10';
+    const VERSION = '0.0.11';
 
     private $uriBase = '';
     private $uriRelative = '';
@@ -33,7 +33,7 @@ class Router
         $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query
         $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
         $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        $this->uri =$this->trimArray(explode('/', $this->uriRelative)); // make uri list
+        $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make uri list
         $this->uriCount = count($this->uri);
         if (1 !== preg_match('#/$#', $this->uriRelative)) { // If relative URI has no slash at end
             $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
@@ -48,8 +48,8 @@ class Router
     public function allow(string $route, string $control)
     {
         $this->allow[] = [
-            'control' => $control,
             'route' => $this->trimArray(explode('/', $route)),
+            'control' => $control,
         ];
     }
 
@@ -61,10 +61,7 @@ class Router
     {
         $this->controls = array_column($this->allow, 'control');
         $this->setRouting();
-        if ($this->matchExact()) {
-            return $this->control;
-        }
-        if ($this->matchVariable()) {
+        if ($this->matchExact() || $this->matchVariable()) {
             return $this->control;
         }
     }
@@ -139,7 +136,7 @@ class Router
     {
         $this->vars = [];
         foreach ($route as $arrayId => $dir) {
-            if ($dir !== '?' && $dir !== $this->uri[$arrayId]) {
+            if (!in_array($dir, ['?', $this->uri[$arrayId]])) {
                 $this->vars = [];
                 return; // match failed - no exact match, no variable match
             }
@@ -174,6 +171,7 @@ class Router
     {
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $url);
+        exit;
     }
 
     /**
