@@ -1,9 +1,9 @@
 # Attogram Router
 
 * The Attogram Router is a small PHP router.
-* Composer ready:  `composer require attogram/router`
 * No dependencies.
 * One simple class.
+* Composer ready:  `composer require attogram/router`
 
 ## Example usage:
 
