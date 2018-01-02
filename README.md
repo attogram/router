@@ -43,10 +43,10 @@ if (!$control) {
     // handle 404 Page Not Found
 }
 
-$base     = $router->getUriBase(); // Get the Base URI for this request:  http://example.com
-$relative = $router->getUriRelative(); // Get the Relative URI for this request:  /test/foo/bar/
+$base     = $router->getUriBase(); // Base URI:  (empty string) or path with no trailing slash
+$relative = $router->getUriRelative(); // Relative URI:  /test/foo/bar/  (always with preceding and trailing slash)
 $vars     = $router->getVars(); // Get URI variables:  $vars = ['foo', 'bar', ...] or empty []
 
-// Do something interesting...
+// Now do something interesting...
 
 ```
