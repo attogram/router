@@ -50,8 +50,11 @@ relative : <?= $relative; ?> &nbsp;
 vars     : <?php
     echo !empty($vars)
         ? '<span class="box good vars">' . print_r($vars, true) . '</span>'
-        : '<span class="box empty">null</span>';
-?> &nbsp;
+        : '<span class="box empty">null</span>'; ?> &nbsp;
+_GET     : <?php
+    echo !empty($_GET)
+        ? '<span class="box good vars">' . print_r($_GET, true) . '</span>'
+        : '<span class="box empty">null</span>'; ?> &nbsp;
 </p>
 <hr />
 <ol>
@@ -68,10 +71,12 @@ vars     : <?php
     <li><a href="<?= $base; ?>/test/FOO/test/"><?= $base; ?>/test/FOO/test/</a></li>
     <li><a href="<?= $base; ?>/test/FOO/test/BAR/"><?= $base; ?>/test/FOO/test/BAR/</a></li>
     <li><a href="<?= $base; ?>/test/FOO/test/BAR/BAZ/"><?= $base; ?>/test/FOO/test/BAR/BAZ/</a></li>
+    <li><a href="<?= $base; ?>/test/FOO/test/BAR/BAZ/?bar=baz"><?= $base; ?>/test/FOO/test/BAR/BAZ/?bar=baz</a></li>
+    <li><a href="<?= $base; ?>?a=b&x=y"><?= $base; ?>?a=b&x=y</a></li>
     <li><a href="<?= $base; ?>/404/"><?= $base; ?>/404/</a></li>
 </ol>
 <hr />
-<?= $title; ?> 
+<?= $title; ?>
 - <a target="_blank" href="https://github.com/attogram/router">github</a>
 - <a target="_blank" href="https://packagist.org/packages/attogram/router">packagist</a>
 - <a target="_blank" href="https://codeclimate.com/github/attogram/router">codeclimate</a>

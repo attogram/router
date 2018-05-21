@@ -7,25 +7,25 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '0.0.11';
+    const VERSION = '0.1.0';
 
+    public $forceSlashAtEnd = false;
+
+    private $allow = [];
+    private $control = '';
+    private $controls = [];
+    private $routesExact = [];
+    private $routesVariable = [];
     private $uriBase = '';
     private $uriRelative = '';
     private $uri = [];
     private $uriCount = 0;
-    private $allow = [];
-    private $routesExact = [];
-    private $routesVariable = [];
-    private $controls = [];
-    private $control = '';
     private $vars = [];
-
 
     /**
      * __construct
      * Sets: ->uriBase, ->uriRelative, ->uri, and ->uriCount
-     * Redirects to proper URL if no slash found at end of current URL
-     * @return void
+     * - optionally forces slash at end of URL
      */
     public function __construct()
     {
@@ -35,7 +35,7 @@ class Router
         $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
         $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make uri list
         $this->uriCount = count($this->uri);
-        if (1 !== preg_match('#/$#', $this->uriRelative)) { // If relative URI has no slash at end
+        if ($this->forceSlashAtEnd && 1 !== preg_match('#/$#', $this->uriRelative)) { // no slash at end of URL?
             $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
         }
     }
@@ -45,7 +45,7 @@ class Router
      * @param string $route
      * @param string $control
      */
-    public function allow(string $route, string $control)
+    public function allow($route, $control)
     {
         $this->allow[] = [
             'route' => $this->trimArray(explode('/', $route)),
@@ -132,7 +132,7 @@ class Router
      * @param array $route
      * @return void
      */
-    private function matchVariableVars($route)
+    private function matchVariableVars(array $route)
     {
         $this->vars = [];
         foreach ($route as $arrayId => $dir) {
@@ -179,7 +179,7 @@ class Router
      * @param string $name
      * @return mixed
      */
-    private function getServer(string $name)
+    private function getServer($name)
     {
         if (!empty($_SERVER[$name])) {
             return $_SERVER[$name];
