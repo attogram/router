@@ -8,7 +8,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.1';
 
     private $allow          = [];
     private $control        = '';
