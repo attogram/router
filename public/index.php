@@ -117,16 +117,21 @@ li { line-height:150%; }
 full      : <?= $full; ?> &nbsp;
 base      : <?= $base; ?> &nbsp;
 relative  : <?= $relative; ?> &nbsp;
-forceSlash: <?= $forceSlash ? 'true' : 'false' ?> &nbsp; [<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a>] &nbsp;
+forceSlash: <?= $forceSlash ? 'true' : 'false'
+?> &nbsp; [<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a>] &nbsp;
 vars      : <?php
+
 if (!empty($vars)) {
     foreach ($vars as $name => $value) {
         print "$name=$value &nbsp; ";
     }
 } else {
     print '<span class="box empty">null</span>';
-} ?> &nbsp;
+}
+
+?> &nbsp;
 _GET      : <?php
+
 if (!empty($_GET)) {
     foreach ($_GET as $name => $value) {
         print htmlentities($name) . '=' . htmlentities($value) . ' &nbsp; ';
@@ -134,6 +139,7 @@ if (!empty($_GET)) {
 } else {
     print '<span class="box empty">null</span>';
 }
+
 ?>
 </p>
 <hr />
@@ -141,19 +147,23 @@ if (!empty($_GET)) {
     <li>{base} <a href="<?= $base; ?>"><?= $base; ?></a></li>
     <li>{full} <a href="<?= $full; ?>"><?= $full; ?></a></li>
 <?php
+
 foreach ($tests as $test) {
     foreach ($test['test'] as $link) {
         print '<li>[' . $test['control'] . '] [' . $test['route'] . ']'
             . ' <a href="' . $base . $link . '">' . $base . $link . '</a></li>';
     }
 }
+
 ?>
 </ol>
 <hr />
 <?= $title; ?>
+ - <b>attogram/router</b>
  - <a target="_blank" href="https://github.com/attogram/router">github</a>
  - <a target="_blank" href="https://packagist.org/packages/attogram/router">packagist</a>
  - <a target="_blank" href="https://codeclimate.com/github/attogram/router">codeclimate</a>
  - <a target="_blank" href="https://travis-ci.org/attogram/router">travis-ci</a>
- - <?= date('r'); ?>
-</body></html>
+ - <?= date('r'); ?> UTC
+</body>
+</html>
