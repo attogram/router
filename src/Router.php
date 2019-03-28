@@ -3,40 +3,33 @@
 namespace Attogram\Router;
 
 /**
- * Attogram Router
+ * Class Router
+ * @package Attogram\Router
  */
 class Router
 {
-    const VERSION = '0.1.0';
+    const VERSION = '1.0.0';
 
-    public $forceSlashAtEnd = false;
-
-    private $allow = [];
-    private $control = '';
-    private $controls = [];
-    private $routesExact = [];
+    private $allow          = [];
+    private $control        = '';
+    private $controls       = [];
+    private $forceSlash     = false;
+    private $routesExact    = [];
     private $routesVariable = [];
-    private $uriBase = '';
-    private $uriRelative = '';
-    private $uri = [];
-    private $uriCount = 0;
-    private $vars = [];
+    private $uriBase        = '';
+    private $uriRelative    = '';
+    private $uri            = [];
+    private $uriCount       = 0;
+    private $vars           = [];
 
     /**
-     * __construct
-     * Sets: ->uriBase, ->uriRelative, ->uri, and ->uriCount
-     * - optionally forces slash at end of URL
+     * Router constructor.
+     * @param bool $forceSlash
      */
-    public function __construct()
+    public function __construct($forceSlash = false)
     {
-        $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
-        $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query
-        $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
-        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make uri list
-        $this->uriCount = count($this->uri);
-        if ($this->forceSlashAtEnd && 1 !== preg_match('#/$#', $this->uriRelative)) { // no slash at end of URL?
-            $this->redirect($this->uriBase . $this->uriRelative . '/'); // Force trailing slash
+        if ($forceSlash) {
+            $this->forceSlash = true;
         }
     }
 
@@ -44,6 +37,7 @@ class Router
      * Allow a route
      * @param string $route
      * @param string $control
+     * @uses $this->allow
      */
     public function allow($route, $control)
     {
@@ -55,20 +49,57 @@ class Router
 
     /**
      * Match request to a controller
-     * @return string|null
+     * @uses $this->allow
+     * @uses $this->controls
+     * @return string
      */
-    public function match()
+    public function match(): string
     {
+        $this->setUriProperties();
         $this->controls = array_column($this->allow, 'control');
         $this->setRouting();
         if ($this->matchExact() || $this->matchVariable()) {
             return $this->control;
         }
+
+        return '';
+    }
+
+    /**
+     * @uses $this->uri
+     * @uses $this->uriBase
+     * @uses $this->uriCount
+     * @uses $this->uriRelative
+     */
+    private function setUriProperties()
+    {
+        $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
+        $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query from URI
+        $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
+        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
+        if ($this->forceSlash) {
+            $this->checkSlashAtEnd();
+        }
+        $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make URI list
+        $this->uriCount = count($this->uri); // directory depth of URI
+    }
+
+    /**
+     * @uses $this->forceSlashAtEnd
+     * @uses $this->uriBase
+     * @uses $this->uriRelative
+     */
+    private function checkSlashAtEnd()
+    {
+        if (1 !== preg_match('#/$#', $this->uriRelative)) {          // If no slash at end of URI?
+            $this->redirect($this->uriBase . $this->uriRelative . '/'); // Then force a trailing slash
+        }
     }
 
     /**
      * Split routes into ->routesExact and ->routesVariable
-     * @return void
+     * @uses $this->routesExact
+     * @uses $this->routesVariable
      */
     private function setRouting()
     {
@@ -83,9 +114,11 @@ class Router
 
     /**
      * Get an array of allowed routes that are the same size as the current URI
+     * @uses $this->allow
+     * @uses $this->uriCount
      * @return array
      */
-    private function trimRoutesByUriSize()
+    private function trimRoutesByUriSize(): array
     {
         $routes = [];
         foreach (array_column($this->allow, 'route') as $routeId => $route) {
@@ -98,9 +131,12 @@ class Router
 
     /**
      * Match URI to an exact route
+     * @uses $this->control
+     * @uses $this->controls
+     * @uses $this->routesExact
      * @return bool
      */
-    private function matchExact()
+    private function matchExact(): bool
     {
         foreach ($this->routesExact as $routeId => $route) {
             if ($this->uri === $route) {
@@ -108,14 +144,18 @@ class Router
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * Match URI to a variable route
+     * @uses $this->control
+     * @uses $this->controls
+     * @uses $this->routesVariable
      * @return bool
      */
-    private function matchVariable()
+    private function matchVariable(): bool
     {
         foreach ($this->routesVariable as $routeId => $route) {
             $this->matchVariableVars($route);
@@ -124,13 +164,15 @@ class Router
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * Set ->vars[] if a variable match is found
+     * Set vars if a variable match is found
      * @param array $route
-     * @return void
+     * @uses $this->uri
+     * @uses $this->vars
      */
     private function matchVariableVars(array $route)
     {
@@ -150,7 +192,7 @@ class Router
      * @param array $array
      * @return array
      */
-    private function trimArray(array $array)
+    private function trimArray(array $array): array
     {
         if ($array[0] === '') { // trim off first empty element
             array_shift($array);
@@ -161,6 +203,7 @@ class Router
         if ($array[count($array)-1] === '') { // trim off last empty element
             array_pop($array);
         }
+
         return $array;
     }
 
@@ -169,6 +212,13 @@ class Router
      */
     private function redirect($url)
     {
+        if (!empty($_GET)) {
+            $gets = [];
+            foreach ($_GET as $name => $value) {
+                $gets[] = $name . '=' . $value;
+            }
+            $url .= '?' . implode('&', $gets);
+        }
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $url);
         exit;
@@ -177,18 +227,20 @@ class Router
     /**
      * get the value of a global _SERVER variable
      * @param string $name
-     * @return mixed
+     * @return string
      */
-    private function getServer($name)
+    private function getServer($name): string
     {
         if (!empty($_SERVER[$name])) {
             return $_SERVER[$name];
         }
+
+        return '';
     }
     /**
      * @return string
      */
-    public function getUriBase()
+    public function getUriBase(): string
     {
         return $this->uriBase;
     }
@@ -196,7 +248,7 @@ class Router
     /**
      * @return string
      */
-    public function getUriRelative()
+    public function getUriRelative(): string
     {
         return $this->uriRelative;
     }
@@ -204,7 +256,7 @@ class Router
     /**
      * @return array
      */
-    public function getVars()
+    public function getVars(): array
     {
         return $this->vars;
     }

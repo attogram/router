@@ -1,21 +1,15 @@
 {
     "name": "attogram/router",
-    "description": "The Attogram Router is a small PHP router. No dependencies. One simple class. Composer ready.",
+    "description": "Attogram Router for PHP 7.  Small, Flexible, No dependencies, One class, and Composer ready.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/attogram/router",
-    "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4"
+        "php": ">=7.0"
     },
     "autoload": {
         "psr-4": {
             "Attogram\\Router\\": "src/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.x-dev"
         }
     }
 }
