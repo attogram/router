@@ -27,7 +27,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '1.0.3';
+    const VERSION = '1.0.4';
 
     private $allow          = [];
     private $control        = '';
