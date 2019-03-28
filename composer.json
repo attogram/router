@@ -1,6 +1,6 @@
 {
     "name": "attogram/router",
-    "description": "Attogram Router for PHP 7.  Small, Flexible, No dependencies, One class, and Composer ready.",
+    "description": "Attogram Router for PHP 7:  Small, Flexible, No dependencies, One class, and Composer ready",
     "type": "library",
     "license": "MIT",
     "homepage": "https://github.com/attogram/router",
