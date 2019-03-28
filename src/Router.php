@@ -8,8 +8,18 @@ declare(strict_types = 1);
 
 namespace Attogram\Router;
 
-use function array_column, array_pop, array_shift, count, explode, header, http_build_query, in_array;
-use function preg_match, preg_replace, rtrim, strtr;
+use function array_column;
+use function array_pop;
+use function array_shift;
+use function count;
+use function explode;
+use function header;
+use function http_build_query;
+use function in_array;
+use function preg_match;
+use function preg_replace;
+use function rtrim;
+use function strtr;
 
 /**
  * Class Router
