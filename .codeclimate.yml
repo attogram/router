@@ -1,4 +1,4 @@
-# attogram/router - codeclimate.yml - v0.0.2
+# attogram/router - codeclimate.yml - v0.0.3
 version: "2"
 exclude_patterns:
 - "vendor/"
@@ -15,11 +15,7 @@ plugins:
   phpmd:
     enabled: true
     checks:
-      CleanCode/StaticAccess: # allow Object::method()
-        enabled: false
       Controversial/Superglobals: # allow $_SERVER in getServer()
-        enabled: false
-      Design/DevelopmentCodeFragment: # allow print_r()
         enabled: false
   phan:
     enabled: true
