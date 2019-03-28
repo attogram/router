@@ -17,7 +17,7 @@ use function preg_match, preg_replace, rtrim, strtr;
  */
 class Router
 {
-    const VERSION = '1.0.3.pre';
+    const VERSION = '1.0.3';
 
     private $allow          = [];
     private $control        = '';
