@@ -1,5 +1,6 @@
-# Attogram Router for PHP 7
+# Attogram Router
 
+Welcome to the Attogram Router for PHP 7:
 Small, Flexible, No dependencies, One class, and Composer ready.
 
 `composer require attogram/router`

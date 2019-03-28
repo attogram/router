@@ -1,6 +1,16 @@
 <?php
+/**
+ * The Attogram Router
+ * @see https://github.com/attogram/router
+ */
+
+declare(strict_types = 1);
 
 namespace Attogram\Router;
+
+use function {array_column, array_pop, array_shift, count, explode, in_array};
+use function {header, http_build_query};
+use function {preg_match, preg_replace, rtrim, strtr};
 
 /**
  * Class Router
@@ -8,7 +18,7 @@ namespace Attogram\Router;
  */
 class Router
 {
-    const VERSION = '1.0.2';
+    const VERSION = '1.0.3.pre';
 
     private $allow          = [];
     private $control        = '';
@@ -77,23 +87,17 @@ class Router
         $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query from URI
         $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
         $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        if ($this->forceSlash) {
-            $this->checkSlashAtEnd();
+        if ($this->forceSlash && (1 !== preg_match('#/$#', $this->uriRelative))) { // If no slash at end of URI?
+            $redirectUrl = $this->uriBase . $this->uriRelative . '/';
+            if (!empty($_GET)) {
+                $redirectUrl .= '?' . http_build_query($_GET);
+            }
+            header('HTTP/1.1 301 Moved Permanently');
+            header('Location: ' . $redirectUrl);
+            exit;
         }
         $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make URI list
         $this->uriCount = count($this->uri); // directory depth of URI
-    }
-
-    /**
-     * @uses $this->forceSlashAtEnd
-     * @uses $this->uriBase
-     * @uses $this->uriRelative
-     */
-    private function checkSlashAtEnd()
-    {
-        if (1 !== preg_match('#/$#', $this->uriRelative)) {          // If no slash at end of URI?
-            $this->redirect($this->uriBase . $this->uriRelative . '/'); // Then force a trailing slash
-        }
     }
 
     /**
@@ -208,25 +212,9 @@ class Router
     }
 
     /**
-     * @param string $url
-     */
-    private function redirect($url)
-    {
-        if (!empty($_GET)) {
-            $gets = [];
-            foreach ($_GET as $name => $value) {
-                $gets[] = $name . '=' . $value;
-            }
-            $url .= '?' . implode('&', $gets);
-        }
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $url);
-        exit;
-    }
-
-    /**
      * get the value of a global _SERVER variable
      * @param string $name
+     * @uses $_SERVER
      * @return string
      */
     private function getServer($name): string
@@ -237,6 +225,7 @@ class Router
 
         return '';
     }
+
     /**
      * @return string
      */
