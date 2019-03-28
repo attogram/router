@@ -6,6 +6,7 @@ Small, Flexible, No dependencies, One class, and Composer ready.
 `composer require attogram/router`
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/95f2868eeb1ed710b794/maintainability)](https://codeclimate.com/github/attogram/router/maintainability)
+[![Build Status](https://travis-ci.org/attogram/router.svg?branch=master)](https://travis-ci.org/attogram/router)
 
 ## Example usage:
 
