@@ -8,9 +8,8 @@ declare(strict_types = 1);
 
 namespace Attogram\Router;
 
-use function {array_column, array_pop, array_shift, count, explode, in_array};
-use function {header, http_build_query};
-use function {preg_match, preg_replace, rtrim, strtr};
+use function array_column, array_pop, array_shift, count, explode, header, http_build_query, in_array;
+use function preg_match, preg_replace, rtrim, strtr;
 
 /**
  * Class Router
@@ -33,14 +32,11 @@ class Router
     private $vars           = [];
 
     /**
-     * Router constructor.
      * @param bool $forceSlash
      */
-    public function __construct($forceSlash = false)
+    public function setForceSlash(bool $forceSlash)
     {
-        if ($forceSlash) {
-            $this->forceSlash = true;
-        }
+        $this->forceSlash = $forceSlash;
     }
 
     /**

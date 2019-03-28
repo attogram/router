@@ -24,16 +24,7 @@ $tests = [
         'control' => 'top-level',
         'test' => [
             '/',
-            '/?foo=bar',
             '/?foo=bar&alpha=beta',
-        ],
-    ],
-    [
-        'route' => '/test',
-        'control' => 'test-no-slash',
-        'test' => [
-            '/test',
-            '/test?foo=bar&alpha=beta',
         ],
     ],
     [
@@ -42,6 +33,14 @@ $tests = [
         'test' => [
             '/test/',
             '/test/?foo=bar&alpha=beta',
+        ],
+    ],
+    [
+        'route' => '/test',
+        'control' => 'test-no-slash',
+        'test' => [
+            '/test',
+            '/test?foo=bar&alpha=beta',
         ],
     ],
     [
@@ -58,10 +57,8 @@ $tests = [
         'route' => '/var/?/?/',
         'control' => 'test-var-2',
         'test' => [
-            '/var/Foo/Bar',
             '/var/Foo/Bar/',
             '/var/Foo/Bar?foo=bar&alpha=beta',
-            '/var/Foo/Bar/?foo=bar&alpha=beta',
         ],
     ],
     [
@@ -80,11 +77,11 @@ $tests = [
     ],
 ];
 
-$forceSlash = false;
+$router = new Router();
+
 if (isset($_SESSION['forceSlash'])) {
-    $forceSlash = $_SESSION['forceSlash'];
+    $router->setForceSlash((bool) $_SESSION['forceSlash']);
 }
-$router = new Router($forceSlash);
 
 foreach ($tests as $test) {
     $router->allow($test['route'], $test['control']);
@@ -98,26 +95,37 @@ $vars     = $router->getVars();
 
 $title = 'Attogram Router v' . $router::VERSION;
 
-?><html lang="en"><head><title><?= $title; ?></title><style type="text/css">
-body { background-color:lightgrey; color:black; font-family:monospace; }
-a:hover, a:active { background-color:yellow; }
-h1 { display:inline; }
-li { line-height:150%; }
-.pre { white-space:pre; line-height:150%; }
-.box { font-weight:bold; padding:0 4px 0 4px; display:inline; }
-.empty { background-color: #e6b3b6; color: #000000; }
-.good { background-color: #a8e88a; color: #000000; }
-.vars { display:block; }
-</style></head><body>
-<h1><?= $title; ?></h1>
-<p class="pre">control  : <?php
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title><?= $title; ?></title>
+    <style>
+        body { background-color:lightgrey; color:black; font-family:monospace; }
+        a:hover, a:active { background-color:yellow; }
+        h1 { display:inline; }
+        li { line-height:150%; }
+        .pre { white-space:pre; line-height:150%; }
+        .box { font-weight:bold; padding:0 4px 0 4px; display:inline; }
+        .empty { background-color: #e6b3b6; color: #000000; }
+        .good { background-color: #a8e88a; color: #000000; }
+    </style>
+</head>
+<body>
+<h1>
+    <?= $title; ?> <small>Test Page</small>
+</h1>
+<p class="pre">
+control  : <?php
     echo !empty($control)
         ? '<span class="box good">' . $control . '</span>'
         : '<span class="box empty">404</span>'; ?> &nbsp;
 full      : <?= $full; ?> &nbsp;
 base      : <?= $base; ?> &nbsp;
 relative  : <?= $relative; ?> &nbsp;
-forceSlash: <?= $forceSlash ? 'true' : 'false'
+forceSlash: <?= (isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'YES' : 'NO'
 ?> &nbsp; [<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a>] &nbsp;
 vars      : <?php
 
