@@ -27,7 +27,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '1.0.4';
+    const VERSION = '1.1.0';
 
     private $allow          = [];
     private $control        = '';
@@ -42,6 +42,22 @@ class Router
     private $vars           = [];
 
     /**
+     * @uses $this->uri
+     * @uses $this->uriBase
+     * @uses $this->uriCount
+     * @uses $this->uriRelative
+     */
+    public function __construct()
+    {
+        $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
+        $this->uriRelative = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query from URI
+        $this->uriRelative = strtr($this->uriRelative, [$this->uriBase => '/']);
+        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
+        $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make URI list
+        $this->uriCount = count($this->uri); // directory depth of URI
+    }
+
+    /**
      * @param bool $forceSlash
      */
     public function setForceSlash(bool $forceSlash)
@@ -50,17 +66,19 @@ class Router
     }
 
     /**
-     * Allow a route
+     * Allow a route only if it is the same size as the current Uri
+     *
      * @param string $route
      * @param string $control
      * @uses $this->allow
      */
-    public function allow($route, $control)
+    public function allow(string $route, string $control)
     {
-        $this->allow[] = [
-            'route' => $this->trimArray(explode('/', $route)),
-            'control' => $control,
-        ];
+        $route = $this->trimArray(explode('/', $route));
+        if ($this->uriCount !== count($route)) {
+            return;
+        }
+        $this->allow[] = ['route' => $route, 'control' => $control];
     }
 
     /**
@@ -71,7 +89,7 @@ class Router
      */
     public function match(): string
     {
-        $this->setUriProperties();
+        $this->checkForceSlash();
         $this->controls = array_column($this->allow, 'control');
         $this->setRouting();
         if ($this->matchExact() || $this->matchVariable()) {
@@ -82,28 +100,24 @@ class Router
     }
 
     /**
-     * @uses $this->uri
+     * @uses $_GET
+     * @uses $this->forceSlash
      * @uses $this->uriBase
-     * @uses $this->uriCount
      * @uses $this->uriRelative
      */
-    private function setUriProperties()
+    private function checkForceSlash()
     {
-        $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
-        $rUri = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query from URI
-        $this->uriRelative = strtr($rUri, [$this->uriBase => '/']);
-        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        if ($this->forceSlash && (1 !== preg_match('#/$#', $this->uriRelative))) { // If no slash at end of URI?
-            $redirectUrl = $this->uriBase . $this->uriRelative . '/';
-            if (!empty($_GET)) {
-                $redirectUrl .= '?' . http_build_query($_GET);
-            }
-            header('HTTP/1.1 301 Moved Permanently');
-            header('Location: ' . $redirectUrl);
-            exit;
+        if (!$this->forceSlash || !(1 !== preg_match('#/$#', $this->uriRelative))) {
+            return;
         }
-        $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make URI list
-        $this->uriCount = count($this->uri); // directory depth of URI
+        $redirectUrl = $this->uriBase . $this->uriRelative . '/';
+        if (!empty($_GET)) {
+            $redirectUrl .= '?' . http_build_query($_GET);
+        }
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $redirectUrl);
+
+        exit; // After a redirect, we must exit to halt any further script execution
     }
 
     /**
@@ -223,7 +237,7 @@ class Router
      * @uses $_SERVER
      * @return string
      */
-    private function getServer($name): string
+    private function getServer(string $name): string
     {
         if (!empty($_SERVER[$name])) {
             return $_SERVER[$name];
