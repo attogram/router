@@ -8,9 +8,7 @@ Small, Flexible, No dependencies, One class, and Composer ready.
 [![Maintainability](https://api.codeclimate.com/v1/badges/95f2868eeb1ed710b794/maintainability)](https://codeclimate.com/github/attogram/router/maintainability)
 [![Build Status](https://travis-ci.org/attogram/router.svg?branch=master)](https://travis-ci.org/attogram/router)
 [![Latest Stable Version](https://poser.pugx.org/attogram/router/v/stable)](https://packagist.org/packages/attogram/router)
-[![Latest Unstable Version](https://poser.pugx.org/attogram/router/v/unstable)](https://packagist.org/packages/attogram/router)
 [![Total Downloads](https://poser.pugx.org/attogram/router/downloads)](https://packagist.org/packages/attogram/router)
-
 
 ## Example usage:
 
