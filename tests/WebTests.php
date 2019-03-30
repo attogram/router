@@ -105,7 +105,7 @@ p { margin: 10px; }
             foreach ($test['test'] as $link) {
                 print '<tr>'
                     . '<td>' . $test['route'] . '</td>'
-                    . '<td>(' . gettype($test['control']) . ') ' . print_r($test['control'],true) . '</td>'
+                    . '<td>(' . gettype($test['control']) . ') ' . print_r($test['control'], true) . '</td>'
                     . '<td><a href="' . $this->router->getUriBase() . $link . '">'
                     . $this->router->getUriBase() . $link . '</a></td>'
                     . '</tr>';
@@ -135,7 +135,7 @@ p { margin: 10px; }
             case '':
                 return $this->empty;
             default:
-                return '<span class="full">(' . gettype($match) . ') ' . print_r($match,true) . '</span>';
+                return '<span class="full">(' . gettype($match) . ') ' . print_r($match, true) . '</span>';
         }
     }
 

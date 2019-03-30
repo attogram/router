@@ -182,7 +182,6 @@ class Router
             $this->control = $routeInfo['c']; // set control for this variable match
 
             return true; // variable match found
-
         }
 
         return false; // variable match not found

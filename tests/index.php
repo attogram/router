@@ -87,7 +87,10 @@ new WebTests([
     ],
     [
         'route' => '/closure/',
-        'control' => function() { return 'hello world'; },
+        'control' =>
+function () {
+    return 'hello world';
+},
         'test' => ['/closure/'],
     ],
 ]);
