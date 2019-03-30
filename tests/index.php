@@ -165,51 +165,59 @@ function testList()
 
 function testResults()
 {
-    global $router;
-
+    global $empty, $router;
     $empty = '<span class="empty">empty</span>';
-
-    $match = $router->match();
-    switch ($match) {
-        case '':
-            $matchResults = $empty;
-            break;
-        default:
-            $matchResults = '<span class="full">' .$match . '</span>';
-    }
-
-    $varsResults = $empty;
-    if (!empty($router->getVars())) {
-        $varsResults = '<span class="full">';
-        foreach ($router->getVars() as $name => $value) {
-            $varsResults .= "$name = $value<br />";
-        }
-        $varsResults .= '</span>';
-    }
-
-    $getResults = $empty;
-    if (!empty($_GET)) {
-        $getResults = '<span class="full">';
-        foreach ($_GET as $name => $value) {
-            $getResults .= htmlentities($name) . ' = ' . htmlentities($value) . '<br />';
-        }
-        $getResults .= '</span>';
-    }
-
-    print '<table>'
-        . '<tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
+    $matchResults = getMatchResults();
+    $varsResults = getVarResults();
+    $getResults = getGetResults();
+    $forceSlashResults = ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false');
+    print '<table><tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
         . '<tr><td>$router->match()</td><td>' . $matchResults . '</td></tr>'
         . '<tr><td>$router->getUriBase()</td><td>' . $router->getUriBase() . '</td></tr>'
         . '<tr><td>$router->getUriRelative()</td><td>' . $router->getUriRelative() . '</td></tr>'
         . '<tr><td>$router->geVars()</td><td>' . $varsResults . '</td></tr>'
         . '<tr><td>$_GET</td><td>' . $getResults . '</td></tr>'
-        . '<tr><td>forceSlash</td><td>'
-        . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false')
-        . '</td></tr>'
-        . '</table>'
-        . '</div>'
-        . '<p>[ Router setup: '
-        . '<a href="?forceSlash=1">Force Slash</a> - '
-        . '<a href="?forceSlash=0">Do Not Force Slash</a>'
-        . ' ]</p>';
+        . '<tr><td>forceSlash</td><td>' . $forceSlashResults . '</td></tr>'
+        . '</table><p>[ Router setup: '
+        . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
+}
+
+function getMatchResults()
+{
+    global $router, $empty;
+    $match = $router->match();
+    switch ($match) {
+        case '':
+            return $empty;
+        default:
+            return '<span class="full">' .$match . '</span>';
+    }
+}
+
+function getVarResults()
+{
+    global $router, $empty;
+    if (empty($router->getVars())) {
+        return $empty;
+    }
+    $varsResults = '<span class="full">';
+    foreach ($router->getVars() as $name => $value) {
+        $varsResults .= "$name = $value<br />";
+    }
+
+    return $varsResults . '</span>';
+}
+
+function getGetResults()
+{
+    global $router, $empty;
+    if (empty($_GET)) {
+        return $empty;
+    }
+    $getResults = '<span class="full">';
+    foreach ($_GET as $name => $value) {
+        $getResults .= htmlentities($name) . ' = ' . htmlentities($value) . '<br />';
+    }
+
+    return $getResults . '</span>';
 }
