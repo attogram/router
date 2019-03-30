@@ -1,14 +1,15 @@
 <?php
 /**
  * The Attogram Router
+ *
  * @see https://github.com/attogram/router
+ * @license MIT
  */
 
 declare(strict_types = 1);
 
 namespace Attogram\Router;
 
-use function array_column;
 use function array_pop;
 use function array_shift;
 use function count;
@@ -73,7 +74,6 @@ class Router
      */
     public function allow(string $route, string $control)
     {
-
         $route = $this->trimArray(explode('/', $route)); // make an array of the route
         if ($this->uriCount !== count($route)) { // Is this route is same size as current URI?
             return; // Do not add route
@@ -93,8 +93,6 @@ class Router
     public function match(): string
     {
         $this->checkForceSlash();
-        //$this->controls = array_column($this->allow, 'control');
-        //$this->setRouting();
         if ($this->matchExact() || $this->matchVariable()) {
             return $this->control;
         }
@@ -172,6 +170,7 @@ class Router
         foreach ($routes as $control => $route) {
             if (!in_array($route, ['?', $this->uri[$control]])) {
                 $this->vars = [];
+
                 return; // match failed - no exact match, no variable match
             }
             if ($route === '?') { // found a variable
