@@ -11,78 +11,18 @@ class WebTests
     public $router;
 
     /** @var array */
-    public $tests =[
-        [
-            'route' => '/',
-            'control' => 'top',
-            'test' => [
-                '/',
-                '/?foo=bar&alpha=beta',
-            ],
-        ],
-        [
-            'route' => '/foo/',
-            'control' => 'with-slash',
-            'test' => [
-                '/foo/',
-                '/foo/?foo=bar&alpha=beta',
-            ],
-        ],
-        [
-            'route' => '/foo',
-            'control' => 'no-slash',
-            'test' => [
-                '/foo',
-                '/foo?alpha=beta&gamma=omega',
-            ],
-        ],
-        [
-            'route' => '/exact/',
-            'control' => 'exact-route',
-            'test' => [
-                '/exact',
-                '/exact/',
-                '/exact/?alpha=beta&gamma=omega',
-            ],
-        ],
-        [
-            'route' => '/var/?/',
-            'control' => '1-variable-route',
-            'test' => [
-                '/var/Foo',
-                '/var/Foo/',
-                '/var/Foo?alpha=beta&gamma=omega',
-                '/var/Foo/?alpha=beta&gamma=omega',
-            ],
-        ],
-        [
-            'route' => '/var/?/?/',
-            'control' => '2-variables-route',
-            'test' => [
-                '/var/Foo/Bar/',
-                '/var/Foo/Bar?alpha=beta&gamma=omega',
-            ],
-        ],
-        [
-            'route' => '/var/?/?/?/',
-            'control' => '3-variables-route',
-            'test' => [
-                '/var/Foo/Bar/Alpha/',
-            ],
-        ],
-        [
-            'route' => '/var/?/?/?/?/',
-            'control' => '4-variables-route',
-            'test' => [
-                '/var/Foo/Bar/Alpha/Omega/',
-            ],
-        ],
-    ];
+    public $tests = [];
 
-    public function __construct()
+    private $empty = '<span class="empty">empty</span>';
+
+    /**
+     * @param array $tests
+     */
+    public function __construct(array $tests)
     {
         session_start();
         $this->checkForceSlash();
+        $this->tests = $tests;
         $this->setupRouter();
         $this->htmlHeader();
         $this->pageHeader();
@@ -149,8 +89,8 @@ p { margin: 10px; }
         $name = 'attogram/router';
         print '<div class="hdr">'
             . '<h1>' . $name . ' <small>v' . Router::VERSION . '</small></h1>'
-            . '<br />@ '
-            . ' <a target="_blank" href="https://github.com/' . $name . '">Github</a>'
+            . '<br /><a href="' . $this->router->getUriBase() . '">Reset Test</a> '
+            . ' - <a target="_blank" href="https://github.com/' . $name . '">Github</a>'
             . ' - <a target="_blank" href="https://packagist.org/packages/' . $name . '">Packagist</a>'
             . ' - <a target="_blank" href="https://codeclimate.com/github/' . $name . '">Codeclimate</a>'
             . ' - <a target="_blank" href="https://travis-ci.org/' . $name . '">Travis-CI</a>'
@@ -160,16 +100,12 @@ p { margin: 10px; }
     public function testList()
     {
         print '<table>'
-            . '<tr><th>control</th><th>route</th><th>tests</th></tr>'
-            . '<tr>'
-            . '<td>-</td><td>-</td>'
-            . '<td><a href="' . $this->router->getUriBase() . '">' . $this->router->getUriBase() . '</a></td>'
-            . '</tr>';
+            . '<tr><th>route</th><th>control</th><th>tests</th></tr>';
         foreach ($this->tests as $test) {
             foreach ($test['test'] as $link) {
                 print '<tr>'
-                    . '<td>' . $test['control'] . '</td>'
                     . '<td>' . $test['route'] . '</td>'
+                    . '<td>(' . gettype($test['control']) . ') ' . print_r($test['control'],true) . '</td>'
                     . '<td><a href="' . $this->router->getUriBase() . $link . '">'
                     . $this->router->getUriBase() . $link . '</a></td>'
                     . '</tr>';
@@ -180,40 +116,33 @@ p { margin: 10px; }
 
     public function testResults()
     {
-        global $empty;
-        $empty = '<span class="empty">empty</span>';
-        $matchResults = $this->getMatchResults();
-        $varsResults = $this->getVarResults();
-        $getResults = $this->getGetResults();
-        $forceSlashResults = ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false');
         print '<table><tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
-            . '<tr><td>$router->match()</td><td>' . $matchResults . '</td></tr>'
+            . '<tr><td>$router->match()</td><td>' . $this->getMatchResults() . '</td></tr>'
             . '<tr><td>$router->getUriBase()</td><td>' . $this->router->getUriBase() . '</td></tr>'
             . '<tr><td>$router->getUriRelative()</td><td>' . $this->router->getUriRelative() . '</td></tr>'
-            . '<tr><td>$router->geVars()</td><td>' . $varsResults . '</td></tr>'
-            . '<tr><td>$_GET</td><td>' . $getResults . '</td></tr>'
-            . '<tr><td>forceSlash</td><td>' . $forceSlashResults . '</td></tr>'
+            . '<tr><td>$router->geVars()</td><td>' .  $this->getVarResults() . '</td></tr>'
+            . '<tr><td>$_GET</td><td>' . $this->getGetResults() . '</td></tr>'
+            . '<tr><td>forceSlash</td><td>'
+            . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
             . '</table><p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
     }
 
     public function getMatchResults()
     {
-        global $empty;
         $match = $this->router->match();
         switch ($match) {
             case '':
-                return $empty;
+                return $this->empty;
             default:
-                return '<span class="full">' . $match . '</span>';
+                return '<span class="full">(' . gettype($match) . ') ' . print_r($match,true) . '</span>';
         }
     }
 
     public function getVarResults()
     {
-        global $empty;
         if (empty($this->router->getVars())) {
-            return $empty;
+            return $this->empty;
         }
         $varsResults = '<span class="full">';
         foreach ($this->router->getVars() as $name => $value) {
@@ -225,9 +154,8 @@ p { margin: 10px; }
 
     public function getGetResults()
     {
-        global $empty;
         if (empty($_GET)) {
-            return $empty;
+            return $this->empty;
         }
         $getResults = '<span class="full">';
         foreach ($_GET as $name => $value) {

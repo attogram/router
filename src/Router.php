@@ -28,7 +28,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '1.1.3';
+    const VERSION = '1.2.0-pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -52,36 +52,37 @@ class Router
         $this->uriRelative = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query from URI
         $this->uriRelative = strtr($this->uriRelative, [$this->uriBase => '/']);
         $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        $this->uri = $this->trimArray(explode('/', $this->uriRelative)); // make URI list
+        $this->uri = $this->getUriArray($this->uriRelative); // make current URI array
         $this->uriCount = count($this->uri); // directory depth of URI
     }
 
     /**
      * @param string $route
-     * @param string $control
+     * @param mixed $control
+     *
      * @uses $this->uriCount
      * @uses $this->routesExact
      * @uses $this->routesVariable
      */
-    public function allow(string $route, string $control)
+    public function allow(string $route, $control)
     {
-        $route = $this->trimArray(explode('/', $route)); // make an array of the route
-        if ($this->uriCount !== count($route)) { // Is this route is same size as current URI?
+        $routeUri = $this->getUriArray($route); // make an array of the route
+        if ($this->uriCount !== count($routeUri)) { // Is this route not the same size as the current URI?
             return; // Do not add route
         }
-        if (in_array('?', $route)) { // Question Mark ? character denotes a variable routing
-            $this->routesVariable[$control] = $route; // This route is a variable routing
+        if (in_array('?', $routeUri)) { // Single Question Mark denotes a variable routing
+            $this->routesVariable[$route] = ['c' => $control, 'uri' => $routeUri]; // add variable route
 
             return;
         }
-        $this->routesExact[$control] = $route; // This route is an exact routing
+        $this->routesExact[$route] = ['c' => $control, 'uri' => $routeUri]; // add exact route
     }
 
     /**
      * @uses $this->control
-     * @return string
+     * @return string|mixed
      */
-    public function match(): string
+    public function match()
     {
         $this->checkForceSlash();
         if ($this->matchExact() || $this->matchVariable()) {
@@ -149,18 +150,20 @@ class Router
      * Match URI to an exact route
      * @uses $this->control
      * @uses $this->routesExact
+     * @uses $this->uri
      * @return bool
      */
     private function matchExact(): bool
     {
-        foreach ($this->routesExact as $control => $route) {
-            if ($this->uri === $route) {
-                $this->control = $control; // matched - exact match
+        foreach ($this->routesExact as $route => $routeInfo) {
+            if ($this->uri === $routeInfo['uri']) { // compare the current URI array to this route URI array
+                $this->control = $routeInfo['c']; // set control or this exact match
 
-                return true;
+                return true; // exact match found
             }
         }
-        return false;
+
+        return false; // exact match not found
     }
 
     /**
@@ -171,44 +174,48 @@ class Router
      */
     private function matchVariable(): bool
     {
-        foreach ($this->routesVariable as $control => $route) {
-            $this->matchVariableVars($route);
-            if (!empty($this->vars)) {
-                $this->control = $control; // matched - variable match
-
-                return true;
+        foreach ($this->routesVariable as $route => $routeInfo) {
+            $this->matchVariableVars($routeInfo['uri']); // find variables
+            if (empty($this->vars)) {
+                continue; // no variable match yet
             }
+            $this->control = $routeInfo['c']; // set control for this variable match
+
+            return true; // variable match found
+
         }
-        return false;
+
+        return false; // variable match not found
     }
 
     /**
-     * Set vars if a variable match is found
-     * @param array $routes
+     * Set $this->vars if a variable match is found
+     * @param array $routeUri
      * @uses $this->uri
      * @uses $this->vars
      */
-    private function matchVariableVars(array $routes)
+    private function matchVariableVars(array $routeUri)
     {
         $this->vars = [];
-        foreach ($routes as $control => $route) {
-            if (!in_array($route, ['?', $this->uri[$control]])) {
+        foreach ($routeUri as $index => $route) {
+            if (!in_array($route, ['?', $this->uri[$index]])) {
                 $this->vars = [];
 
                 return; // match failed - no exact match, no variable match
             }
             if ($route === '?') { // found a variable
-                $this->vars[] = $this->uri[$control];
+                $this->vars[] = $this->uri[$index];
             }
         }
     }
 
     /**
-     * @param array $array
+     * @param string $uri
      * @return array
      */
-    private function trimArray(array $array): array
+    private function getUriArray(string $uri): array
     {
+        $array = explode('/', $uri);
         if ($array[0] === '') { // trim off first empty element
             array_shift($array);
         }
