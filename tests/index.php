@@ -105,12 +105,12 @@ htmlFooter();
 
 function htmlHeader()
 {
-?><!doctype html>
+    print '<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Attogram Router v<?= $router::VERSION ?> Test Page</title>
+<title>Attogram Router v' . Router::VERSION . ' Test Page</title>
 <style>
 body { background-color:white; color:black; font-family:monospace; margin:0; }
 a:hover, a:active { background-color:yellow; }
@@ -124,8 +124,7 @@ p { margin: 10px; }
 .full { background-color: #d2ffda; color:black; font-weight: bold; }
 </style>
 </head>
-<body>
-<?php
+<body>';
 }
 
 function htmlFooter()
