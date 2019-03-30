@@ -21,58 +21,67 @@ if (isset($_GET['forceSlash'])) {
 $tests = [
     [
         'route' => '/',
-        'control' => 'top-level',
+        'control' => 'top',
         'test' => [
             '/',
             '/?foo=bar&alpha=beta',
         ],
     ],
     [
-        'route' => '/test/',
-        'control' => 'test-slash',
+        'route' => '/foo/',
+        'control' => 'with-slash',
         'test' => [
-            '/test/',
-            '/test/?foo=bar&alpha=beta',
+            '/foo/',
+            '/foo/?foo=bar&alpha=beta',
         ],
     ],
     [
-        'route' => '/test',
-        'control' => 'test-no-slash',
+        'route' => '/foo',
+        'control' => 'no-slash',
         'test' => [
-            '/test',
-            '/test?foo=bar&alpha=beta',
+            '/foo',
+            '/foo?alpha=beta&gamma=omega',
+        ],
+    ],
+    [
+        'route' => '/exact/',
+        'control' => 'exact-route',
+        'test' => [
+            '/exact',
+            '/exact/',
+            '/exact/?alpha=beta&gamma=omega',
         ],
     ],
     [
         'route' => '/var/?/',
-        'control' => 'test-var-1',
+        'control' => '1-variable-route',
         'test' => [
             '/var/Foo',
             '/var/Foo/',
-            '/var/Foo?foo=bar&alpha=beta',
-            '/var/Foo/?foo=bar&alpha=beta',
+            '/var/Foo?alpha=beta&gamma=omega',
+            '/var/Foo/?alpha=beta&gamma=omega',
         ],
     ],
     [
         'route' => '/var/?/?/',
-        'control' => 'test-var-2',
+        'control' => '2-variables-route',
         'test' => [
             '/var/Foo/Bar/',
-            '/var/Foo/Bar?foo=bar&alpha=beta',
+            '/var/Foo/Bar?alpha=beta&gamma=omega',
         ],
     ],
     [
         'route' => '/var/?/?/?/',
-        'control' => 'test-var-3',
+        'control' => '3-variables-route',
         'test' => [
             '/var/Foo/Bar/Alpha/',
         ],
     ],
     [
         'route' => '/var/?/?/?/?/',
-        'control' => 'test-var-4',
+        'control' => '4-variables-route',
         'test' => [
-            '/var/Foo/Bar/Alpha/Beta/',
+            '/var/Foo/Bar/Alpha/Omega/',
         ],
     ],
 ];
@@ -121,7 +130,7 @@ $title = 'Attogram Router v' . $router::VERSION;
 control  : <?php
     echo !empty($control)
         ? '<span class="box good">' . $control . '</span>'
-        : '<span class="box empty">404</span>'; ?> &nbsp;
+        : '<span class="box empty">null</span>'; ?> &nbsp;
 full      : <?= $full; ?> &nbsp;
 base      : <?= $base; ?> &nbsp;
 relative  : <?= $relative; ?> &nbsp;
