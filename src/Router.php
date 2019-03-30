@@ -27,11 +27,9 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '1.1.0';
+    const VERSION = '1.1.1.pre';
 
-    private $allow          = [];
     private $control        = '';
-    private $controls       = [];
     private $forceSlash     = false;
     private $routesExact    = [];
     private $routesVariable = [];
@@ -59,6 +57,7 @@ class Router
 
     /**
      * @param bool $forceSlash
+     * @uses $this->forceSlash
      */
     public function setForceSlash(bool $forceSlash)
     {
@@ -66,32 +65,36 @@ class Router
     }
 
     /**
-     * Allow a route only if it is the same size as the current Uri
-     *
      * @param string $route
      * @param string $control
-     * @uses $this->allow
+     * @uses $this->uriCount
+     * @uses $this->routesExact
+     * @uses $this->routesVariable
      */
     public function allow(string $route, string $control)
     {
-        $route = $this->trimArray(explode('/', $route));
-        if ($this->uriCount !== count($route)) {
+
+        $route = $this->trimArray(explode('/', $route)); // make an array of the route
+        if ($this->uriCount !== count($route)) { // Is this route is same size as current URI?
+            return; // Do not add route
+        }
+        if (in_array('?', $route)) { // Question Mark ? character denotes a variable routing
+            $this->routesVariable[$control] = $route; // This route is a variable routing
+
             return;
         }
-        $this->allow[] = ['route' => $route, 'control' => $control];
+        $this->routesExact[$control] = $route; // This route is an exact routing
     }
 
     /**
-     * Match request to a controller
-     * @uses $this->allow
-     * @uses $this->controls
+     * @uses $this->control
      * @return string
      */
     public function match(): string
     {
         $this->checkForceSlash();
-        $this->controls = array_column($this->allow, 'control');
-        $this->setRouting();
+        //$this->controls = array_column($this->allow, 'control');
+        //$this->setRouting();
         if ($this->matchExact() || $this->matchVariable()) {
             return $this->control;
         }
@@ -116,98 +119,63 @@ class Router
         }
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $redirectUrl);
-
+        
         exit; // After a redirect, we must exit to halt any further script execution
-    }
-
-    /**
-     * Split routes into ->routesExact and ->routesVariable
-     * @uses $this->routesExact
-     * @uses $this->routesVariable
-     */
-    private function setRouting()
-    {
-        foreach ($this->trimRoutesByUriSize() as $routeId => $route) {
-            if (in_array('?', $route)) {
-                $this->routesVariable[$routeId] = $route;
-                continue;
-            }
-            $this->routesExact[$routeId] = $route;
-        }
-    }
-
-    /**
-     * Get an array of allowed routes that are the same size as the current URI
-     * @uses $this->allow
-     * @uses $this->uriCount
-     * @return array
-     */
-    private function trimRoutesByUriSize(): array
-    {
-        $routes = [];
-        foreach (array_column($this->allow, 'route') as $routeId => $route) {
-            if ($this->uriCount === count($route)) {
-                $routes[$routeId] = $route;
-            }
-        }
-        return $routes;
     }
 
     /**
      * Match URI to an exact route
      * @uses $this->control
-     * @uses $this->controls
      * @uses $this->routesExact
      * @return bool
      */
     private function matchExact(): bool
     {
-        foreach ($this->routesExact as $routeId => $route) {
+        foreach ($this->routesExact as $control => $route) {
             if ($this->uri === $route) {
-                $this->control = $this->controls[$routeId]; // matched - exact match
+                $this->control = $control; // matched - exact match
+
                 return true;
             }
         }
-
         return false;
     }
 
     /**
      * Match URI to a variable route
      * @uses $this->control
-     * @uses $this->controls
      * @uses $this->routesVariable
      * @return bool
      */
     private function matchVariable(): bool
     {
-        foreach ($this->routesVariable as $routeId => $route) {
+        foreach ($this->routesVariable as $control => $route) {
             $this->matchVariableVars($route);
             if (!empty($this->vars)) {
-                $this->control = $this->controls[$routeId]; // matched - variable match
+                $this->control = $control; // matched - variable match
+
                 return true;
             }
         }
-
         return false;
     }
 
     /**
      * Set vars if a variable match is found
-     * @param array $route
+     * @param array $routes
      * @uses $this->uri
      * @uses $this->vars
      */
-    private function matchVariableVars(array $route)
+    private function matchVariableVars(array $routes)
     {
         $this->vars = [];
-        foreach ($route as $arrayId => $dir) {
-            if (!in_array($dir, ['?', $this->uri[$arrayId]])) {
+        foreach ($routes as $control => $route) {
+            if (!in_array($route, ['?', $this->uri[$control]])) {
                 $this->vars = [];
                 return; // match failed - no exact match, no variable match
             }
-            if ($dir === '?') { // found a variable
-                $this->vars[] = $this->uri[$arrayId];
+            if ($route === '?') { // found a variable
+                $this->vars[] = $this->uri[$control];
             }
         }
     }
