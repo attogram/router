@@ -57,15 +57,6 @@ class Router
     }
 
     /**
-     * @param bool $forceSlash
-     * @uses $this->forceSlash
-     */
-    public function setForceSlash(bool $forceSlash)
-    {
-        $this->forceSlash = $forceSlash;
-    }
-
-    /**
      * @param string $route
      * @param string $control
      * @uses $this->uriCount
@@ -98,6 +89,39 @@ class Router
         }
 
         return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getUriBase(): string
+    {
+        return $this->uriBase;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUriRelative(): string
+    {
+        return $this->uriRelative;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVars(): array
+    {
+        return $this->vars;
+    }
+
+    /**
+     * @param bool $forceSlash
+     * @uses $this->forceSlash
+     */
+    public function setForceSlash(bool $forceSlash)
+    {
+        $this->forceSlash = $forceSlash;
     }
 
     /**
@@ -211,29 +235,5 @@ class Router
         }
 
         return '';
-    }
-
-    /**
-     * @return string
-     */
-    public function getUriBase(): string
-    {
-        return $this->uriBase;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUriRelative(): string
-    {
-        return $this->uriRelative;
-    }
-
-    /**
-     * @return array
-     */
-    public function getVars(): array
-    {
-        return $this->vars;
     }
 }
