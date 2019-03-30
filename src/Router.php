@@ -27,7 +27,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '1.1.1.pre';
+    const VERSION = '1.1.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -119,7 +119,7 @@ class Router
         }
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $redirectUrl);
-        
+
         exit; // After a redirect, we must exit to halt any further script execution
     }
 
