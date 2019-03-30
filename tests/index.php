@@ -89,9 +89,9 @@ new WebTests([
     [
         'route' => '/closure/',
         'control' =>
-function () {
-    return 'hello world';
-},
+    function () {
+        return 'hello world';
+    },
         'test' => ['/closure/'],
     ],
 ]);

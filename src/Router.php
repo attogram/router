@@ -28,7 +28,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '1.2.0-pre.2';
+    const VERSION = '1.2.0-pre.3';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -155,7 +155,7 @@ class Router
      */
     private function matchExact(): bool
     {
-        foreach ($this->routesExact as $route => $routeInfo) {
+        foreach ($this->routesExact as $route => $routeInfo) { // @TODO no $route neeed
             if ($this->uri === $routeInfo['uri']) { // compare the current URI array to this route URI array
                 $this->control = $routeInfo['c']; // set control or this exact match
 
@@ -174,7 +174,7 @@ class Router
      */
     private function matchVariable(): bool
     {
-        foreach ($this->routesVariable as $route => $routeInfo) {
+        foreach ($this->routesVariable as $route => $routeInfo) { // @TODO no $route neeed
             $this->matchVariableVars($routeInfo['uri']); // find variables
             if (empty($this->vars)) {
                 continue; // no variable match yet
