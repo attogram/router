@@ -1,4 +1,4 @@
-# attogram/router - .travis.yml - v0.0.2
+# attogram/router Travis Build
 
 language: php
 
@@ -6,12 +6,10 @@ php:
   - 7.0
   - 7.1
   - 7.2
-#  - nightly
+  - 7.3
   
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: nightly
 
 before_script:
   - composer install

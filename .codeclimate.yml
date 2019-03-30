@@ -1,4 +1,4 @@
-# attogram/router - codeclimate.yml - v0.0.3
+# attogram/router - codeclimate checks
 version: "2"
 exclude_patterns:
 - "vendor/"
