@@ -28,7 +28,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '2.0.1-pre';
+    const VERSION = '2.0.1-pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -188,7 +188,7 @@ class Router
     }
 
     /**
-     * Set $this->vars if a variable match is found
+     * Populates $this->vars if a variable match is found
      * @param array $routeUri
      * @uses $this->uri
      * @uses $this->vars
