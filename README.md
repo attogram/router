@@ -1,16 +1,18 @@
 # Attogram Router
 
-Welcome to the Attogram Router for PHP 7:
-Small, Flexible, One class, and Composer ready.
-
-`composer require attogram/router`
+Welcome to the Attogram Router 
+for PHP 7 - Small, Flexible, One class, and Composer ready.
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/95f2868eeb1ed710b794/maintainability)](https://codeclimate.com/github/attogram/router/maintainability)
 [![Build Status](https://travis-ci.org/attogram/router.svg?branch=master)](https://travis-ci.org/attogram/router)
 [![Latest Stable Version](https://poser.pugx.org/attogram/router/v/stable)](https://packagist.org/packages/attogram/router)
 [![Total Downloads](https://poser.pugx.org/attogram/router/downloads)](https://packagist.org/packages/attogram/router)
 
-## Example usage:
+## Install
+
+`composer require attogram/router`
+
+## Usage
 
 Setup URL rewriting, example `.htaccess`:
 ```
