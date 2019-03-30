@@ -28,7 +28,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '2.0.1-pre.1';
+    const VERSION = '2.0.1';
 
     private $control        = '';
     private $forceSlash     = false;
