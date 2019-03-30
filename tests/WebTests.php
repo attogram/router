@@ -159,7 +159,8 @@ p { margin: 10px; }
         }
         $getResults = '<span class="full">';
         foreach ($_GET as $name => $value) {
-            $getResults .= htmlentities($name) . ' = ' . htmlentities($value) . '<br />';
+            $getResults .= htmlentities((string) $name)
+                . ' = ' . htmlentities((string) $value) . '<br />';
         }
 
         return $getResults . '</span>';

@@ -28,7 +28,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '2.0.0';
+    const VERSION = '2.0.1-pre';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -80,16 +80,20 @@ class Router
 
     /**
      * @uses $this->control
-     * @return string|mixed
+     * @uses $this->forceSlash
+     * @uses $this->uriRelative
+     * @return mixed|null
      */
     public function match()
     {
-        $this->checkForceSlash();
+        if ($this->forceSlash && (1 !== preg_match('#/$#', $this->uriRelative))) {
+            $this->forceSlash();
+        }
         if ($this->matchExact() || $this->matchVariable()) {
             return $this->control;
         }
 
-        return '';
+        return null;
     }
 
     /**
@@ -127,21 +131,17 @@ class Router
 
     /**
      * @uses $_GET
-     * @uses $this->forceSlash
      * @uses $this->uriBase
      * @uses $this->uriRelative
      */
-    private function checkForceSlash()
+    private function forceSlash()
     {
-        if (!$this->forceSlash || !(1 !== preg_match('#/$#', $this->uriRelative))) {
-            return;
-        }
-        $redirectUrl = $this->uriBase . $this->uriRelative . '/';
-        if (!empty($_GET)) {
-            $redirectUrl .= '?' . http_build_query($_GET);
+        $redirect = $this->uriBase . $this->uriRelative . '/'; // add a trailing slash to the current URL
+        if (!empty($_GET)) { // if there is a query string in the current request
+            $redirect .= '?' . http_build_query($_GET); // add the query string to the redirect URL
         }
         header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $redirectUrl);
+        header('Location: ' . $redirect);
 
         exit; // After a redirect, we must exit to halt any further script execution
     }
