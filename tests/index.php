@@ -95,37 +95,43 @@ if (isset($_SESSION['forceSlash'])) {
 foreach ($tests as $test) {
     $router->allow($test['route'], $test['control']);
 }
+// The Test Page
+htmlHeader();
+pageHeader();
+testResults();
+testList();
+pageHeader();
+htmlFooter();
 
-?>
-<!doctype html>
+function htmlHeader()
+{
+?><!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Attogram Router v<?= $router::VERSION ?> Test Page</title>
 <style>
-    body { background-color:white; color:black; font-family:monospace; margin:0; }
-    a:hover, a:active { background-color:yellow; }
-    h1 { display:inline; }
-    li { line-height:150%; }
-    table, tr, th, td { border:1px solid black; border-collapse:collapse; padding:4px; margin:10px; }
-    p { margin: 10px; }
-    .hdr { background-color:#2ed5ee; color: black; padding:10px; }
-    .hdr a { color: #000000; }
-    .empty { background-color: #fff0f0; color:black; font-style:italic; }
-    .full { background-color: #d2ffda; color:black; font-weight: bold; }
+body { background-color:white; color:black; font-family:monospace; margin:0; }
+a:hover, a:active { background-color:yellow; }
+h1 { display:inline; }
+li { line-height:150%; }
+table, tr, th, td { border:1px solid black; border-collapse:collapse; padding:4px; margin:10px; }
+p { margin: 10px; }
+.hdr { background-color:#2ed5ee; color: black; padding:10px; }
+.hdr a { color: #000000; }
+.empty { background-color: #fff0f0; color:black; font-style:italic; }
+.full { background-color: #d2ffda; color:black; font-weight: bold; }
 </style>
 </head>
 <body>
 <?php
-pageHeader();
-testResults();
-testList();
-pageHeader();
-?>
-</body>
-</html>
-<?php
+}
+
+function htmlFooter()
+{
+    print '</body></html>';
+}
 
 function pageHeader()
 {
@@ -210,7 +216,7 @@ function getVarResults()
 
 function getGetResults()
 {
-    global $router, $empty;
+    global $empty;
     if (empty($_GET)) {
         return $empty;
     }
