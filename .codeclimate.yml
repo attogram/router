@@ -15,8 +15,8 @@ plugins:
   phpmd:
     enabled: true
     checks:
-      Controversial/Superglobals: # allow $_SERVER in getServer()
-        enabled: false
+      Controversial/Superglobals:
+        enabled: false # allow $_SERVER in getServer(), $_GET in forceSlash()
   phan:
     enabled: true
     checks:
