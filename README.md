@@ -3,7 +3,7 @@
 Welcome to the Attogram Router 
 for PHP 7 - Small, Flexible, One class, and Composer ready.
 
-![Attogram Router](https://raw.githubusercontent.com/attogram/router/master/tests/attogram.router.250.png) 
+[![Attogram Router](https://raw.githubusercontent.com/attogram/router/master/examples/attogram.router.250.png)](https://github.com/attogram/router)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/95f2868eeb1ed710b794/maintainability)](https://codeclimate.com/github/attogram/router/maintainability)
 [![Build Status](https://travis-ci.org/attogram/router.svg?branch=master)](https://travis-ci.org/attogram/router)

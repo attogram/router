@@ -16,5 +16,5 @@ before_script:
   
 script:
   - if find src/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
-  - if find tests/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
+  - if find examples/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
   - if find vendor/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;

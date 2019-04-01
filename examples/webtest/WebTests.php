@@ -100,7 +100,7 @@ p { margin: 10px; }
     public function testList()
     {
         print '<table>'
-            . '<tr><th>route</th><th>control</th><th>tests</th></tr>';
+            . '<tr><th>route</th><th>control</th><th>examples</th></tr>';
         foreach ($this->tests as $test) {
             foreach ($test['test'] as $link) {
                 print '<tr>'

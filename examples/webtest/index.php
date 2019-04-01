@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 use Attogram\Router\Tests\WebTests;
 
-require_once(__DIR__ . '/../../vendor/autoload.php');
-require_once __DIR__ . '/WebTests.php';
+require_once'../../vendor/autoload.php';
+require_once 'WebTests.php';
 
 new WebTests([
     [
