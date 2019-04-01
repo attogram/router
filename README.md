@@ -10,13 +10,13 @@ for PHP 7 - Small, Flexible, One class, and Composer ready.
 [![Latest Stable Version](https://poser.pugx.org/attogram/router/v/stable)](https://packagist.org/packages/attogram/router)
 [![Total Downloads](https://poser.pugx.org/attogram/router/downloads)](https://packagist.org/packages/attogram/router)
 
-Composer: composer require attogram/router
+Composer: `composer require attogram/router`
 
-Git: git clone https://github.com/attogram/router.git
+Git: `git clone https://github.com/attogram/router.git`
 
-Download: https://github.com/attogram/router/archive/master.zip
+Download: `https://github.com/attogram/router/archive/master.zip`
 
-License: MIT
+License: `MIT`
 
 ## Examples
 
@@ -33,7 +33,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]
 ```
 
-Create your `index.php`.  And example:
+Create your `index.php`.  For example:
 ```php
 use Attogram\Router\Router;
 
