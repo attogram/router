@@ -20,7 +20,7 @@ License: `MIT`
 
 ## Examples
 
-* demo: http://getitdaily.com/attogram-router/
+* demo: https://getitdaily.com/attogram-router/
 * view source: https://github.com/attogram/router/tree/master/examples
 
 ## Usage
