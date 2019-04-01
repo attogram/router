@@ -20,11 +20,12 @@ License: `MIT`
 
 ## Examples
 
-http://getitdaily.com/attogram-router/
+* demo: http://getitdaily.com/attogram-router/
+* view source: https://github.com/attogram/router/tree/master/examples
 
 ## Usage
 
-Setup URL rewriting, example `.htaccess`:
+Setup URL rewriting. For example with Apache `.htaccess`:
 ```
 Options +FollowSymLinks
 RewriteEngine On
