@@ -42,11 +42,15 @@ require_once('/path/to/vendor/autoload.php');
 // Get an Attogram Router instance
 $router = new Router();
 
-// Allow your routes
+// Allow your routes:  
+//
 //   $router->allow(route, control)
-//      route   = a string with the URI list, forward-slash delimited
-//                Exact routing example:  /foo/bar
-//                Variable routing, use question mark:  /foo/?
+//
+//      route = a string with the URI list, forward-slash delimited
+//              Exact routing:  /foo/bar
+//              Variable routing, use question mark:  /foo/?
+//                variables are retrieved as an ordered array via: $router->getVars()
+//
 //      control = anything you want, a string, a closure, an array, an object, whatever
 
 $router->allow('/', 'home');
@@ -67,10 +71,10 @@ if (!$control) {
 
 // And have some helper functions:
 
-// Get Base URI: (empty string) or path with no trailing slash
+// Get Base URI: Aka "home" - path with no trailing slash (or empty string)
 $base = $router->getUriBase();
 
-// Get Relative URI:  /foo/bar/  (always with preceding and trailing slash)
+// Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
 $relative = $router->getUriRelative(); 
 
 // Get URI variables: ['foo', 'bar', ...] or empty []
