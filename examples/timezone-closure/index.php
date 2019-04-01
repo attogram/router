@@ -9,7 +9,8 @@ $router = new Router();
 
 $title = 'Timezone Closure Control - Attogram Router Examples';
 
-$homeLink = '<a href="' . $router->getUriBase() . '">' . $title . '</a>';
+$homeLink = '<a href="' . $router->getUriBase() . '/../">Attogram Router</a>'
+    . ' - <a href="' . $router->getUriBase() . '">' . $title . '</a>';
 
 $header = '<html lang="en"><head><title>' . $title . '</title></head><body>' . $homeLink . '<hr />';
 $footer = '<footer><hr />' . $homeLink . '</footer></body></html>';
