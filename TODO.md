@@ -12,4 +12,9 @@
     * URI of current request
       * as a relative URI (default), or full URL with protocol and hostname
     
+  * getProtocol()
+    * http:// or https://
+  
+  * getHostname()
+    
   * sendHeaders(404)    
