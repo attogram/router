@@ -193,28 +193,6 @@ class Router
     }
 
     /**
-     * get a value from a global array, or the whole global array
-     *
-     * @param string $global
-     * @param string $name
-     * @return array|string
-     */
-    private function getGlobal(string $global, string $name)
-    {
-        if (!isset($GLOBALS[$global])|| !is_array($GLOBALS[$global]) ) {
-            return ''; // Global does not exist, or is not array
-        }
-        if (!$name) {
-            return $GLOBALS[$global]; // return entire Global array
-        }
-        if (!empty($GLOBALS[$global][$name])) {
-            return $GLOBALS[$global][$name]; // return requested Global variable
-        }
-
-        return ''; // Not Found or Empty
-    }
-
-    /**
      * Redirect to a new URL, and exit
      *  - optionally set HTTP Response Code (301 = Moved Permanently, 302 = Found)
      *
@@ -226,6 +204,28 @@ class Router
         header('Location: ' . $url, true, $httpResponseCode);
 
         exit; // After a redirect, we must exit to halt any further script execution
+    }
+
+    /**
+     * get a value from a global array, or the whole global array
+     *
+     * @param string $global
+     * @param string $name
+     * @return array|string
+     */
+    private function getGlobal(string $global, string $name)
+    {
+        if (!isset($GLOBALS) || !isset($GLOBALS[$global]) || !is_array($GLOBALS[$global])) {
+            return ''; // Global does not exist, or is not array
+        }
+        if (!$name) {
+            return $GLOBALS[$global]; // return entire Global array
+        }
+        if (!empty($GLOBALS[$global][$name])) {
+            return $GLOBALS[$global][$name]; // return requested Global variable
+        }
+
+        return ''; // Not Found or Empty
     }
 
     /**

@@ -40,33 +40,12 @@ use Attogram\Router\Router;
 
 require_once('/path/to/vendor/autoload.php');
 
-// Get an Attogram Router instance
 $router = new Router();
 
-/**
- * Allow routes
- *
- * $router->allow($route, $control);
- *
- * route = a string with the URI list, forward-slash delimited
- *
- *      Exact routing:
- *         Home:  '/'
- *         Page:  '/foo/bar'
- *           - preceding and trailing slashes are optional, except for top level '/'
- *
- *      Variable routing:
- *          - use a question mark to denote a URI segment as a variable
- *          - variables are retrieved as an ordered array via: $router->getVars()
- *          - Examples:
- *              '/id/?'
- *              '/book/?/chapter/?'
- *              '/foo/?/?/?'
- *
- * control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
- */
+// Allow routes
 $router->allow('/', 'home');
 $router->allow('/foo/bar', 'foobar');
+$router->allow('/pi', 3.141);
 $router->allow('/hello', function () { print 'world'; });
 $router->allow('/book/?/chapter/?', function (Router $router) { 
     $book = $router->getVars()[0];
@@ -87,7 +66,8 @@ if (!$control) {
 
 ## Functions
 
-### allow($route, $control)
+### allow
+`public function allow(string $route, $control)`
 * Allow and set a control for a route
 * $route = a string with the URI list, forward-slash delimited
   * Exact routing:
@@ -103,32 +83,38 @@ if (!$control) {
       - '/foo/?/?/?'
 * $control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
  
-### match()
+### match
+`public function match()`
 * Get the control for the current request, or null if no matching request
 * optionally force a trailing slash on the current request
 
-### setForceSlash(true|false)
+### setForceSlash
+`public function setForceSlash(bool $forceSlash)`
 * Set the optional forcing of a trailing slash on all requests
 * default is false
 
-### getUriBase()
+### getUriBase
+`public function getUriBase(): string`
 * Get Base URI: Aka "home" - path with no trailing slash (or empty string)
 
-### getUriRelative()
+### getUriRelative
+`public function getUriRelative(): string`
 * Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
 
-### getVars()
+### getVars
+`public function getVars(): array`
 * Get URI segment variables: ['foo', 'bar', ...] or empty []
 
-### redirect($url)
+### redirect
+`public function redirect(string $url, int $httpResponseCode = 301)`
 * Redirect to a new url and exit
-* optionaly set the response code (301 or 302)
-  * redirect($url, 301) or redirect($url, 302)
-
-### getGet($name)
+* optionally set a response code (301 = permanent, 302 = moved)
+### getGet
+`public function getGet(string $name = '')`
 * Get a global _GET variable, or empty string if not found
 
-### getServer($name)
+### getServer
+`public function getServer(string $name = '')`
 * Get a global _SERVER variable, or empty string if not found
 
 ----
