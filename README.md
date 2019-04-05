@@ -74,7 +74,7 @@ $router->allow('/book/?/chapter/?', function (Router $router) {
 });
 
 // Get the control that matches the current request
-$control  = $router->match(); 
+$control = $router->match(); 
 
 // If no match, $control is null
 if (!$control) {
@@ -83,6 +83,7 @@ if (!$control) {
 }
 
 // Now dispatch based on $control, in whatever manner you wish 
+
 
 // And have some helper functions:
 
@@ -94,5 +95,8 @@ $relative = $router->getUriRelative();
 
 // Get URI variables: ['foo', 'bar', ...] or empty []
 $vars = $router->getVars(); 
+
+// Get a _GET variable, returns a string, or empty string if not found
+$foo = $router->getGet('foo');
 
 ```
