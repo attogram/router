@@ -87,7 +87,11 @@ if (!$control) {
 `public function match()`
 * Get the control for the current request, or null if no matching request
 
-### getVars
+### getVar
+`public function getVar(int $index = 0)`
+* Get a URI segment variable, by index
+
+### getVars [DEPRECATED]
 `public function getVars(): array`
 * Get URI segment variables: ['foo', 'bar', ...] or empty []
 

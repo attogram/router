@@ -17,7 +17,6 @@ use function array_shift;
 use function count;
 use function explode;
 use function header;
-use function http_build_query;
 use function in_array;
 use function preg_match;
 use function preg_replace;
@@ -112,7 +111,7 @@ class Router
     public function match()
     {
         // if forceSlash is ON, and there is no trailing slash on current request
-        if ($this->forceSlash && $this->hasTrailingSlash($this->uriRelative)) {
+        if ($this->forceSlash && !$this->hasTrailingSlash($this->uriRelative)) {
             $this->forceSlash();
         }
         // Find control for current request, first with exact matching, then with variable matching
@@ -182,9 +181,25 @@ class Router
     }
 
     /**
+     * Get a URI variable, based on index
+     *
+     * @param int $index
+     * @return string|null
+     */
+    public function getVar(int $index = 0)
+    {
+        if (isset($this->vars[$index])) {
+            return $this->vars[$index];
+        }
+
+        return null;
+    }
+
+    /**
      * Get an array of URI variables from the current request
      *
      * @return array
+     * @deprecated
      */
     public function getVars(): array
     {
@@ -280,9 +295,9 @@ class Router
         // add a trailing slash to the current URL
         $url = $this->uriBase . $this->uriRelative . '/';
         // if there is a query string in the current request
-        if (!empty($this->getGet())) {
+        if (!empty($this->getServer('QUERY_STRING'))) {
             // add the query string to the redirect URL
-            $url .= '?' . http_build_query($this->getGet());
+            $url .= '?' . $this->getServer('QUERY_STRING');
         }
         $this->redirect($url);
     }
