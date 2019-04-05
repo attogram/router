@@ -30,7 +30,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.1.pre.0';
+    const VERSION = '3.0.1.pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -158,7 +158,7 @@ class Router
     private function getPreFull(bool $full = false): string
     {
         if ($full) {
-           return $this->getProtocol()  . '://' . $this->getServerName();
+            return $this->getProtocol()  . '://' . $this->getServerName();
         }
 
         return '';
