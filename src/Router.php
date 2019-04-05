@@ -42,12 +42,6 @@ class Router
     private $uriCount       = 0;
     private $vars           = [];
 
-    /**
-     * @uses $this->uri
-     * @uses $this->uriBase
-     * @uses $this->uriCount
-     * @uses $this->uriRelative
-     */
     public function __construct()
     {
         // Get the Base of the URI, without 'index.php'
@@ -88,10 +82,6 @@ class Router
      *
      * @param string $route
      * @param mixed $control
-     *
-     * @uses $this->uriCount
-     * @uses $this->routesExact
-     * @uses $this->routesVariable
      */
     public function allow(string $route, $control)
     {
@@ -114,15 +104,12 @@ class Router
      * Get the matching control or the current request
      *      - optionally, force a trailing slash on current request
      *
-     * @uses $this->control
-     * @uses $this->forceSlash
-     * @uses $this->uriRelative
      * @return mixed|null
      */
     public function match()
     {
         // if forceSlash is ON, and there is no trailing slash on current request
-        if ($this->forceSlash && (1 !== preg_match('#/$#', $this->uriRelative))) {
+        if ($this->forceSlash && $this->hasTrailingSlash($this->uriRelative)) {
             $this->forceSlash();
         }
         // Find control for current request, first with exact matching, then with variable matching
@@ -134,11 +121,25 @@ class Router
     }
 
     /**
+     * @param string $uri
+     * @return bool
+     */
+    private function hasTrailingSlash(string $uri): bool
+    {
+        if (1 === preg_match('#/$#', $uri)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function getHome(): string
     {
-        return $this->uriBase;
+        return $this->uriBase . ($this->hasTrailingSlash($this->uriBase) ? '' : '/');
+
     }
 
     /**
@@ -146,7 +147,7 @@ class Router
      */
     public function getHomeFull(): string
     {
-        return $this->getProtocol()  . '://' . $this->getServerName() . $this->uriBase;
+        return $this->getProtocol() . '://' . $this->getServerName() . $this->getHome();
     }
 
     /**
@@ -154,7 +155,7 @@ class Router
      */
     public function getCurrent(): string
     {
-        return $this->getHome() . $this->uriRelative;
+        return $this->uriBase . $this->uriRelative;
     }
 
     /**
@@ -162,7 +163,7 @@ class Router
      */
     public function getCurrentFull(): string
     {
-        return $this->getHomeFull() . $this->uriRelative;
+        return $this->getProtocol() . '://' . $this->getServerName() . $this->getCurrent();
     }
 
     /**
@@ -183,7 +184,12 @@ class Router
      */
     public function getServerName(): string
     {
-        return $this->getServer('SERVER_NAME');
+        return $this->getServer('SERVER_NAME')
+            . (
+                $this->getServer('SERVER_PORT') != 80
+                    ? ':' . $this->getServer('SERVER_PORT')
+                    : ''
+            );
     }
 
     /**
@@ -200,7 +206,6 @@ class Router
      * set Force a trailing slash on all requests?
      *
      * @param bool $forceSlash
-     * @uses $this->forceSlash
      */
     public function setForceSlash(bool $forceSlash)
     {
@@ -267,9 +272,6 @@ class Router
 
     /**
      * Force a trailing slash on the current request
-     *
-     * @uses $this->uriBase
-     * @uses $this->uriRelative
      */
     private function forceSlash()
     {
@@ -285,10 +287,6 @@ class Router
 
     /**
      * Match URI to an exact route
-     *
-     * @uses $this->control
-     * @uses $this->routesExact
-     * @uses $this->uri
      * @return bool
      */
     private function matchExact(): bool
@@ -306,9 +304,6 @@ class Router
 
     /**
      * Match URI to a variable route
-     *
-     * @uses $this->control
-     * @uses $this->routesVariable
      * @return bool
      */
     private function matchVariable(): bool
@@ -330,8 +325,6 @@ class Router
      * Populates $this->vars if a variable match is found
      *
      * @param array $routeUri
-     * @uses $this->uri
-     * @uses $this->vars
      */
     private function matchVariableVars(array $routeUri)
     {

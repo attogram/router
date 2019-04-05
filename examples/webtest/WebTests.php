@@ -89,8 +89,7 @@ p { margin: 10px; }
         $name = 'attogram/router';
         print '<div class="hdr">'
             . '<h1>Attogram Router Web Tests</h1>'
-            . '<br /><a href="' . $this->router->getHome() . '/../">About</a>'
-            . ' - <a href="' . $this->router->getHome() . '">RESET</a>'
+            . '<br /><a href="' . $this->router->getHome() . '">RESET test</a>'
             . ' - <a target="_blank" href="https://github.com/' . $name . '">Github</a>'
             . ' - <a target="_blank" href="https://getitdaily.com/attogram-router/">Getitdaily</a>'
             . ' - <a target="_blank" href="https://packagist.org/packages/' . $name . '">Packagist</a>'
@@ -105,11 +104,11 @@ p { margin: 10px; }
             . '<tr><th>route</th><th>control</th><th>web tests</th></tr>';
         foreach ($this->tests as $test) {
             foreach ($test['test'] as $link) {
+                $testLink = $this->router->getHome() . ltrim($link, '/');
                 print '<tr>'
                     . '<td>' . $test['route'] . '</td>'
                     . '<td>(' . gettype($test['control']) . ') ' . print_r($test['control'], true) . '</td>'
-                    . '<td><a href="' . $this->router->getHome() . $link . '">'
-                    . $this->router->getHome() . $link . '</a></td>'
+                    . '<td><a href="' . $testLink . '">' . $testLink . '</a></td>'
                     . '</tr>';
             }
         }
@@ -127,6 +126,8 @@ p { margin: 10px; }
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
             . '<tr><td>getCurrentFull()</td><td>' . $this->router->getCurrentFull() . '</td></tr>'
             . '<tr><td>getHomeFull()</td><td>' . $this->router->getHomeFull() . '</td></tr>'
+            . '<tr><td>getServerName()</td><td>' . $this->router->getServerName() . '</td></tr>'
+            . '<tr><td>getProtocol()</td><td>' . $this->router->getProtocol() . '</td></tr>'
             . '<tr><td>VERSION</td><td>' . Router::VERSION . '</td></tr>'
             . '<tr><td>forceSlash</td><td>'
             . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
