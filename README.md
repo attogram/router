@@ -20,8 +20,8 @@ License: `MIT`
 
 ## Examples
 
-* demo: https://getitdaily.com/attogram-router/
-* view source: https://github.com/attogram/router/tree/master/examples
+* live demo: https://getitdaily.com/attogram-router/
+* demo source: https://github.com/attogram/router/tree/master/examples
 
 ## Usage
 
@@ -85,7 +85,7 @@ if (!$control) {
 // Now dispatch based on $control, in whatever manner you wish 
 ```
 
-## functions
+## Functions
 
 ### allow($route, $control)
 
