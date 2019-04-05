@@ -134,19 +134,55 @@ class Router
     }
 
     /**
+     * @param bool $full
      * @return string
      */
-    public function getUriBase(): string
+    public function getHome(bool $full = false): string
     {
-        return $this->uriBase;
+        return $this->getPreFull($full) . $this->uriBase;
+    }
+
+    /**
+     * @param bool $full
+     * @return string
+     */
+    public function getCurrent(bool $full = false): string
+    {
+        return $this->getHome($full) . $this->uriRelative;
+    }
+
+    /**
+     * @param bool $full
+     * @return string
+     */
+    private function getPreFull(bool $full = false): string
+    {
+        if ($full) {
+           return $this->getProtocol()  . '://' . $this->getServerName();
+        }
+
+        return '';
     }
 
     /**
      * @return string
      */
-    public function getUriRelative(): string
+    public function getProtocol(): string
     {
-        return $this->uriRelative;
+        return (
+            (!empty($this->getServer('HTTPS')) && ($this->getServer('HTTPS') !== 'off'))
+            || ($this->getServer('SERVER_PORT') == 443)
+        )
+            ? 'https'
+            : 'http';
+    }
+
+    /**
+     * @return string
+     */
+    public function getServerName(): string
+    {
+        return $this->getServer('SERVER_NAME');
     }
 
     /**

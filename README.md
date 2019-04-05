@@ -86,24 +86,19 @@ if (!$control) {
 ### match
 `public function match()`
 * Get the control for the current request, or null if no matching request
-* optionally force a trailing slash on the current request
-
-### setForceSlash
-`public function setForceSlash(bool $forceSlash)`
-* Set the optional forcing of a trailing slash on all requests
-* default is false
-
-### getUriBase
-`public function getUriBase(): string`
-* Get Base URI: Aka "home" - path with no trailing slash (or empty string)
-
-### getUriRelative
-`public function getUriRelative(): string`
-* Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
 
 ### getVars
 `public function getVars(): array`
 * Get URI segment variables: ['foo', 'bar', ...] or empty []
+
+### getHome
+
+### getCurrent
+
+### setForceSlash
+`public function setForceSlash(bool $forceSlash)`
+* Sets the optional forcing of a trailing slash on all requests
+* by default is false
 
 ### redirect
 `public function redirect(string $url, int $httpResponseCode = 301)`

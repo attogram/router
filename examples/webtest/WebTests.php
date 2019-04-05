@@ -89,8 +89,10 @@ p { margin: 10px; }
         $name = 'attogram/router';
         print '<div class="hdr">'
             . '<h1>' . $name . ' <small>v' . Router::VERSION . '</small></h1>'
-            . '<br /><a href="' . $this->router->getUriBase() . '">Reset Test</a> '
+            . '<br /><a href="' . $this->router->getHome() . '/../">About</a>'
+            . ' - <a href="' . $this->router->getHome() . '">RESET</a>'
             . ' - <a target="_blank" href="https://github.com/' . $name . '">Github</a>'
+            . ' - <a target="_blank" href="https://getitdaily.com/attogram-router/">Getitdaily</a>'
             . ' - <a target="_blank" href="https://packagist.org/packages/' . $name . '">Packagist</a>'
             . ' - <a target="_blank" href="https://codeclimate.com/github/' . $name . '">Codeclimate</a>'
             . ' - <a target="_blank" href="https://travis-ci.org/' . $name . '">Travis-CI</a>'
@@ -106,8 +108,8 @@ p { margin: 10px; }
                 print '<tr>'
                     . '<td>' . $test['route'] . '</td>'
                     . '<td>(' . gettype($test['control']) . ') ' . print_r($test['control'], true) . '</td>'
-                    . '<td><a href="' . $this->router->getUriBase() . $link . '">'
-                    . $this->router->getUriBase() . $link . '</a></td>'
+                    . '<td><a href="' . $this->router->getHome() . $link . '">'
+                    . $this->router->getHome() . $link . '</a></td>'
                     . '</tr>';
             }
         }
@@ -116,14 +118,17 @@ p { margin: 10px; }
 
     public function testResults()
     {
-        print '<table><tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
-            . '<tr><td>$router->match()</td><td>' . $this->getMatchResults() . '</td></tr>'
-            . '<tr><td>$router->getUriBase()</td><td>' . $this->router->getUriBase() . '</td></tr>'
-            . '<tr><td>$router->getUriRelative()</td><td>' . $this->router->getUriRelative() . '</td></tr>'
-            . '<tr><td>$router->geVars()</td><td>' .  $this->getVarResults() . '</td></tr>'
+        print '<table style="float:left;">'
+            . '<tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
+            . '<tr><td>match()</td><td>' . $this->getMatchResults() . '</td></tr>'
+            . '<tr><td>geVars()</td><td>' .  $this->getVarResults() . '</td></tr>'
             . '<tr><td>$_GET</td><td>' . $this->getGetResults() . '</td></tr>'
             . '<tr><td>forceSlash</td><td>'
             . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
+            . '<tr><td>getCurrent()</td><td>' . $this->router->getCurrent() . '</td></tr>'
+            . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
+            . '<tr><td>getCurrent(true)</td><td>' . $this->router->getCurrent(true) . '</td></tr>'
+            . '<tr><td>getHome(true)</td><td>' . $this->router->getHome(true) . '</td></tr>'
             . '</table><p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
     }
