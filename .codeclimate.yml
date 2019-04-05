@@ -6,6 +6,9 @@ checks:
   method-complexity:
     config:
       threshold: 5
+  method-count:
+    config:
+      threshold: 22
 plugins:
   phpcodesniffer:
     enabled: true

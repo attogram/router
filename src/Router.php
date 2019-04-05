@@ -30,7 +30,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.2.pre.0';
+    const VERSION = '3.0.2.pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -139,7 +139,6 @@ class Router
     public function getHome(): string
     {
         return $this->uriBase . ($this->hasTrailingSlash($this->uriBase) ? '' : '/');
-
     }
 
     /**
