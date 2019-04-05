@@ -215,6 +215,20 @@ class Router
     }
 
     /**
+     * Redirect to a new URL, and exit
+     *  - optionally set HTTP Response Code (301 = Moved Permanently, 302 = Found)
+     *
+     * @param string $url
+     * @param int $httpResponseCode
+     */
+    public function redirect(string $url, int $httpResponseCode = 301)
+    {
+        header('Location: ' . $url, true, $httpResponseCode);
+
+        exit; // After a redirect, we must exit to halt any further script execution
+    }
+
+    /**
      * Force a trailing slash on the current request
      *
      * @uses $this->uriBase
@@ -223,17 +237,13 @@ class Router
     private function forceSlash()
     {
         // add a trailing slash to the current URL
-        $redirect = $this->uriBase . $this->uriRelative . '/';
+        $url = $this->uriBase . $this->uriRelative . '/';
         // if there is a query string in the current request
         if (!empty($this->getGet())) {
             // add the query string to the redirect URL
-            $redirect .= '?' . http_build_query($this->getGet());
+            $url .= '?' . http_build_query($this->getGet());
         }
-        // Redirect to the new URL
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $redirect);
-
-        exit; // After a redirect, we must exit to halt any further script execution
+        $this->redirect($url);
     }
 
     /**
