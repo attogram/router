@@ -88,48 +88,47 @@ if (!$control) {
 ## Functions
 
 ### allow($route, $control)
-
-Allow and set a control for a route
-
-$route = a string with the URI list, forward-slash delimited
-
-Exact routing:
- - Home:  '/'
- - Page:  '/foo/bar'
-   - preceding and trailing slashes are optional, except for top level '/'
-
-Variable routing:
-  - use a question mark to denote a URI segment as a variable
-  - variables are retrieved as an ordered array via: $router->getVars()
-  - Examples:
-    - '/id/?'
-    - '/book/?/chapter/?'
-    - '/foo/?/?/?'
-
-$control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
+* Allow and set a control for a route
+* $route = a string with the URI list, forward-slash delimited
+  * Exact routing:
+    - Home:  '/'
+    - Page:  '/foo/bar'
+      - preceding and trailing slashes are optional, except for top level '/'
+  * Variable routing:
+    - use a question mark to denote a URI segment as a variable
+    - variables are retrieved as an ordered array via: $router->getVars()
+    - Examples:
+      - '/id/?'
+      - '/book/?/chapter/?'
+      - '/foo/?/?/?'
+* $control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
  
 ### match()
-Get the control for the current request, or null if no matching request
-- optionally force a trailing slash on the current request
+* Get the control for the current request, or null if no matching request
+* optionally force a trailing slash on the current request
 
 ### setForceSlash(true|false)
-Set the optional forcing of a trailing slash on all requests
-- default is false
+* Set the optional forcing of a trailing slash on all requests
+* default is false
 
 ### getUriBase()
-Get Base URI: Aka "home" - path with no trailing slash (or empty string)
+* Get Base URI: Aka "home" - path with no trailing slash (or empty string)
 
 ### getUriRelative()
-Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
+* Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
 
 ### getVars()
-Get URI segment variables: ['foo', 'bar', ...] or empty []
+* Get URI segment variables: ['foo', 'bar', ...] or empty []
 
 ### redirect($url)
-Redirect to a new url and exit
+* Redirect to a new url and exit
+* optionaly set the response code (301 or 302)
+  * redirect($url, 301) or redirect($url, 302)
 
 ### getGet($name)
-Get a global _GET variable, or empty string if not found
+* Get a global _GET variable, or empty string if not found
 
 ### getServer($name)
-Get a global _SERVER variable, or empty string if not found
+* Get a global _SERVER variable, or empty string if not found
+
+----
