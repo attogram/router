@@ -73,30 +73,34 @@ $router->allow('/book/?/chapter/?', function (Router $router) {
     $chapter = $router->getVars()[1];
 });
 
-// Get the control that matches the current request
+// Get the $control that matches the current request
 $control = $router->match(); 
 
 // If no match, $control is null
 if (!$control) {
-    // handle 404 Page Not Found
+    header('HTTP/1.0 404 Not Found');
     exit;
 }
 
 // Now dispatch based on $control, in whatever manner you wish 
-
-
-// And have some helper functions:
-
-// Get Base URI: Aka "home" - path with no trailing slash (or empty string)
-$base = $router->getUriBase();
-
-// Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
-$relative = $router->getUriRelative(); 
-
-// Get URI variables: ['foo', 'bar', ...] or empty []
-$vars = $router->getVars(); 
-
-// Get a _GET variable, returns a string, or empty string if not found
-$foo = $router->getGet('foo');
-
 ```
+
+## Helper functions
+
+### getUriBase()
+Get Base URI: Aka "home" - path with no trailing slash (or empty string)
+
+### getUriRelative()
+Get Relative URI:  /foo/bar/ - always with preceding and trailing slash
+
+### getVars()
+Get URI segment variables: ['foo', 'bar', ...] or empty []
+
+### redirect($url)
+Redirect to a new url and exit
+
+### getGet($name)
+Get a global _GET variable, or empty string if not found
+
+### getServer($name)
+Get a global _SERVER variable, or empty string if not found
