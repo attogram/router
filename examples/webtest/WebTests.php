@@ -21,9 +21,9 @@ class WebTests
     public function __construct(array $tests)
     {
         session_start();
-        $this->checkForceSlash();
         $this->tests = $tests;
         $this->setupRouter();
+        $this->checkForceSlash();
         $this->htmlHeader();
         $this->pageHeader();
         $this->testResults();
@@ -36,8 +36,7 @@ class WebTests
     {
         if (isset($_GET['forceSlash'])) {
             $_SESSION['forceSlash'] = $_GET['forceSlash'];
-            header('HTTP/1.1 301 Moved Permanently');
-            header('Location: ' . str_replace('index.php', '', $_SERVER['PHP_SELF']));
+            $this->router->redirect($this->router->getHomeFull(), 302);
             return;
         }
     }
