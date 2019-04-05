@@ -5,7 +5,7 @@ exclude_patterns:
 checks:
   method-complexity:
     config:
-      threshold: 6 # default: 5
+      threshold: 5
 plugins:
   phpcodesniffer:
     enabled: true
@@ -16,7 +16,7 @@ plugins:
     enabled: true
     checks:
       Controversial/Superglobals:
-        enabled: false # allow $_SERVER in getServer(), $_GET in forceSlash()
+        enabled: false # allow $GLOBALS in getGlobal()
   phan:
     enabled: true
     checks:
