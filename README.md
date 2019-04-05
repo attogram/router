@@ -92,8 +92,10 @@ if (!$control) {
 * Get URI segment variables: ['foo', 'bar', ...] or empty []
 
 ### getHome
+### getHomeFull
 
 ### getCurrent
+### getCurrentFull
 
 ### setForceSlash
 `public function setForceSlash(bool $forceSlash)`

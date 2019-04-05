@@ -88,7 +88,7 @@ p { margin: 10px; }
     {
         $name = 'attogram/router';
         print '<div class="hdr">'
-            . '<h1>' . $name . ' <small>v' . Router::VERSION . '</small></h1>'
+            . '<h1>Attogram Router Web Tests</h1>'
             . '<br /><a href="' . $this->router->getHome() . '/../">About</a>'
             . ' - <a href="' . $this->router->getHome() . '">RESET</a>'
             . ' - <a target="_blank" href="https://github.com/' . $name . '">Github</a>'
@@ -102,7 +102,7 @@ p { margin: 10px; }
     public function testList()
     {
         print '<table>'
-            . '<tr><th>route</th><th>control</th><th>examples</th></tr>';
+            . '<tr><th>route</th><th>control</th><th>web tests</th></tr>';
         foreach ($this->tests as $test) {
             foreach ($test['test'] as $link) {
                 print '<tr>'
@@ -123,13 +123,15 @@ p { margin: 10px; }
             . '<tr><td>match()</td><td>' . $this->getMatchResults() . '</td></tr>'
             . '<tr><td>geVars()</td><td>' .  $this->getVarResults() . '</td></tr>'
             . '<tr><td>$_GET</td><td>' . $this->getGetResults() . '</td></tr>'
-            . '<tr><td>forceSlash</td><td>'
-            . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
             . '<tr><td>getCurrent()</td><td>' . $this->router->getCurrent() . '</td></tr>'
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
-            . '<tr><td>getCurrent(true)</td><td>' . $this->router->getCurrent(true) . '</td></tr>'
-            . '<tr><td>getHome(true)</td><td>' . $this->router->getHome(true) . '</td></tr>'
-            . '</table><p>[ Router setup: '
+            . '<tr><td>getCurrentFull()</td><td>' . $this->router->getCurrentFull() . '</td></tr>'
+            . '<tr><td>getHomeFull()</td><td>' . $this->router->getHomeFull() . '</td></tr>'
+            . '<tr><td>VERSION</td><td>' . Router::VERSION . '</td></tr>'
+            . '<tr><td>forceSlash</td><td>'
+            . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
+            . '</table>'
+            . '<p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
     }
 
