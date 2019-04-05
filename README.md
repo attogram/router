@@ -43,23 +43,37 @@ require_once('/path/to/vendor/autoload.php');
 // Get an Attogram Router instance
 $router = new Router();
 
-// Allow your routes:  
-//
-//   $router->allow(route, control)
-//
-//      route = a string with the URI list, forward-slash delimited
-//              Exact routing:  /foo/bar
-//              Variable routing, use question mark:  /foo/?
-//                variables are retrieved as an ordered array via: $router->getVars()
-//
-//      control = anything you want, a string, a closure, an array, an object, whatever
-
+/**
+ * Allow routes
+ *
+ * $router->allow($route, $control);
+ *
+ * route = a string with the URI list, forward-slash delimited
+ *
+ *      Exact routing:
+ *         Home:  '/'
+ *         Page:  '/foo/bar'
+ *           - preceding and trailing slashes are optional, except for top level '/'
+ *
+ *      Variable routing:
+ *          - use a question mark to denote a URI segment as a variable
+ *          - variables are retrieved as an ordered array via: $router->getVars()
+ *          - Examples:
+ *              '/id/?'
+ *              '/book/?/chapter/?'
+ *              '/foo/?/?/?'
+ *
+ * control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
+ */
 $router->allow('/', 'home');
-$router->allow('/about', 'about');
-$router->allow('/view/?', 'view');
-$router->allow('/edit/?', 'edit');
+$router->allow('/foo/bar', 'foobar');
+$router->allow('/hello', function () { print 'world'; });
+$router->allow('/book/?/chapter/?', function (Router $router) { 
+    $book = $router->getVars()[0];
+    $chapter = $router->getVars()[1];
+});
 
-// Get the route that matches the current request
+// Get the control that matches the current request
 $control  = $router->match(); 
 
 // If no match, $control is null

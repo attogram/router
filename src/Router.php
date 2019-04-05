@@ -1,8 +1,10 @@
 <?php
 /**
- * The Attogram Router
+ * The Attogram Router for PHP 7
  *
  * @see https://github.com/attogram/router
+ * @see https://getitdaily.com/attogram-router/
+ *
  * @license MIT
  */
 
@@ -28,7 +30,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '2.0.3';
+    const VERSION = '3.0.0.pre.0';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -48,15 +50,42 @@ class Router
      */
     public function __construct()
     {
+        // Get the Base of the URI, without 'index.php'
         $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
-        $this->uriRelative = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI')); // remove query from URI
+        // make Relative URI - remove query string from the request (everything after ?)
+        $this->uriRelative = preg_replace('/\?.*/', '', $this->getServer('REQUEST_URI'));
+        // make Relative URI - remove the Base URI
         $this->uriRelative = strtr($this->uriRelative, [$this->uriBase => '/']);
-        $this->uriBase = rtrim($this->uriBase, '/'); // remove trailing slash from base URI
-        $this->uri = $this->getUriArray($this->uriRelative); // make current URI array
-        $this->uriCount = count($this->uri); // directory depth of URI
+        // remove trailing slash from Base URI
+        $this->uriBase = rtrim($this->uriBase, '/');
+        // make array from Relative URI
+        $this->uri = $this->getUriArray($this->uriRelative);
+        // directory depth of current request
+        $this->uriCount = count($this->uri);
     }
 
     /**
+     * Allow a route
+     *
+     * $router->allow($route, $control);
+     *
+     * route = a string with the URI list, forward-slash delimited
+     *
+     *      Exact routing:
+     *         Home:  '/'
+     *         Page:  '/foo/bar'
+     *           - preceding and trailing slashes are optional, except for top level '/'
+     *
+     *      Variable routing:
+     *          - use a question mark to denote a URI segment as a variable
+     *          - variables are retrieved as an ordered array via: $router->getVars()
+     *          - Examples:
+     *              '/id/?'
+     *              '/book/?/chapter/?'
+     *              '/foo/?/?/?'
+     *
+     * control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
+     *
      * @param string $route
      * @param mixed $control
      *
@@ -66,19 +95,25 @@ class Router
      */
     public function allow(string $route, $control)
     {
-        $routeUri = $this->getUriArray($route); // make an array of the route
-        if ($this->uriCount !== count($routeUri)) { // Is this route not the same size as the current URI?
+        // make an array of the route
+        $routeUri = $this->getUriArray($route);
+        // Is this route not the same size as the current URI?
+        if ($this->uriCount !== count($routeUri)) {
             return; // Do not add route
         }
-        if (in_array('?', $routeUri)) { // Single Question Mark denotes a variable routing
+        // Single Question Mark denotes a variable routing
+        if (in_array('?', $routeUri)) {
             $this->routesVariable[$route] = ['c' => $control, 'uri' => $routeUri]; // add variable route
 
-            return;
+            return; // Variable route found
         }
         $this->routesExact[$route] = ['c' => $control, 'uri' => $routeUri]; // add exact route
     }
 
     /**
+     * Get the matching control or the current request
+     *      - optionally, force a trailing slash on current request
+     *
      * @uses $this->control
      * @uses $this->forceSlash
      * @uses $this->uriRelative
@@ -86,14 +121,16 @@ class Router
      */
     public function match()
     {
+        // if forceSlash is ON, and there is no trailing slash on current request
         if ($this->forceSlash && (1 !== preg_match('#/$#', $this->uriRelative))) {
             $this->forceSlash();
         }
+        // Find control for current request, first with exact matching, then with variable matching
         if ($this->matchExact() || $this->matchVariable()) {
-            return $this->control;
+            return $this->control; // Match found
         }
 
-        return null;
+        return null; // No match found
     }
 
     /**
@@ -113,6 +150,8 @@ class Router
     }
 
     /**
+     * Get an array of URI variables from the current request
+     *
      * @return array
      */
     public function getVars(): array
@@ -121,6 +160,8 @@ class Router
     }
 
     /**
+     * set Force a trailing slash on all requests?
+     *
      * @param bool $forceSlash
      * @uses $this->forceSlash
      */
@@ -130,16 +171,65 @@ class Router
     }
 
     /**
-     * @uses $_GET
+     * get the value of a global _SERVER variable, or the whole _SERVER array
+     *
+     * @param string $name
+     * @return array|string
+     */
+    public function getServer(string $name = '')
+    {
+        return $this->getGlobal('_SERVER', $name);
+    }
+
+    /**
+     * get a value from the global _GET array, or the whole _GET array
+     *
+     * @param string $name
+     * @return array|string
+     */
+    public function getGet(string $name = '')
+    {
+        return $this->getGlobal('_GET', $name);
+    }
+
+    /**
+     * get a value from a global array, or the whole global array
+     *
+     * @param string $global
+     * @param string $name
+     * @return array|string
+     */
+    private function getGlobal(string $global, string $name)
+    {
+        if (!isset($GLOBALS[$global])|| !is_array($GLOBALS[$global]) ) {
+            return ''; // Global does not exist, or is not array
+        }
+        if (!$name) {
+            return $GLOBALS[$global]; // return entire Global array
+        }
+        if (!empty($GLOBALS[$global][$name])) {
+            return $GLOBALS[$global][$name]; // return requested Global variable
+        }
+
+        return ''; // Not Found or Empty
+    }
+
+    /**
+     * Force a trailing slash on the current request
+     *
      * @uses $this->uriBase
      * @uses $this->uriRelative
      */
     private function forceSlash()
     {
-        $redirect = $this->uriBase . $this->uriRelative . '/'; // add a trailing slash to the current URL
-        if (!empty($_GET)) { // if there is a query string in the current request
-            $redirect .= '?' . http_build_query($_GET); // add the query string to the redirect URL
+        // add a trailing slash to the current URL
+        $redirect = $this->uriBase . $this->uriRelative . '/';
+        // if there is a query string in the current request
+        if (!empty($this->getGet())) {
+            // add the query string to the redirect URL
+            $redirect .= '?' . http_build_query($this->getGet());
         }
+        // Redirect to the new URL
         header('HTTP/1.1 301 Moved Permanently');
         header('Location: ' . $redirect);
 
@@ -148,6 +238,7 @@ class Router
 
     /**
      * Match URI to an exact route
+     *
      * @uses $this->control
      * @uses $this->routesExact
      * @uses $this->uri
@@ -168,6 +259,7 @@ class Router
 
     /**
      * Match URI to a variable route
+     *
      * @uses $this->control
      * @uses $this->routesVariable
      * @return bool
@@ -189,6 +281,7 @@ class Router
 
     /**
      * Populates $this->vars if a variable match is found
+     *
      * @param array $routeUri
      * @uses $this->uri
      * @uses $this->vars
@@ -209,6 +302,8 @@ class Router
     }
 
     /**
+     * Build an array from a URI string
+     *
      * @param string $uri
      * @return array
      */
@@ -226,20 +321,5 @@ class Router
         }
 
         return $array;
-    }
-
-    /**
-     * get the value of a global _SERVER variable
-     * @param string $name
-     * @uses $_SERVER
-     * @return string
-     */
-    private function getServer(string $name): string
-    {
-        if (!empty($_SERVER[$name])) {
-            return $_SERVER[$name];
-        }
-
-        return '';
     }
 }
