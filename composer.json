@@ -1,9 +1,19 @@
 {
     "name": "attogram/router",
     "description": "Attogram Router for PHP 7 - Small, Flexible, One class, and Composer ready",
+    "keywords": ["router", "PHP 7", "One class"],
+    "homepage": "https://github.com/attogram/router",
+    "support": {
+        "docs": "https://getitdaily.com/attogram-router/",
+        "issues": "https://www.patreon.com/attogram"
+    },
+    "authors": [{
+        "name": "Attogram Project",
+        "homepage": "https://github.com/attogram",
+        "role": "Developer"
+    }],
     "type": "library",
     "license": "MIT",
-    "homepage": "https://github.com/attogram/router",
     "require": {
         "php": "^7.0"
     },
