@@ -30,7 +30,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.2';
+    const VERSION = '3.0.3.pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -42,6 +42,9 @@ class Router
     private $uriCount       = 0;
     private $vars           = [];
 
+    /**
+     * Router constructor.
+     */
     public function __construct()
     {
         // Get the Base of the URI, without 'index.php'
@@ -121,19 +124,6 @@ class Router
     }
 
     /**
-     * @param string $uri
-     * @return bool
-     */
-    private function hasTrailingSlash(string $uri): bool
-    {
-        if (1 === preg_match('#/$#', $uri)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @return string
      */
     public function getHome(): string
@@ -185,7 +175,7 @@ class Router
     {
         return $this->getServer('SERVER_NAME')
             . (
-                $this->getServer('SERVER_PORT') != 80
+                !in_array((int) $this->getServer('SERVER_PORT'), [80, 443])
                     ? ':' . $this->getServer('SERVER_PORT')
                     : ''
             );
@@ -267,6 +257,19 @@ class Router
         }
 
         return ''; // Not Found or Empty
+    }
+
+    /**
+     * @param string $uri
+     * @return bool
+     */
+    private function hasTrailingSlash(string $uri): bool
+    {
+        if (1 === preg_match('#/$#', $uri)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

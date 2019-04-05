@@ -121,7 +121,7 @@ p { margin: 10px; }
             . '<tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
             . '<tr><td>match()</td><td>' . $this->getMatchResults() . '</td></tr>'
             . '<tr><td>geVars()</td><td>' .  $this->getVarResults() . '</td></tr>'
-            . '<tr><td>$_GET</td><td>' . $this->getGetResults() . '</td></tr>'
+            . '<tr><td>getGet()</td><td>' . $this->getGetResults() . '</td></tr>'
             . '<tr><td>getCurrent()</td><td>' . $this->router->getCurrent() . '</td></tr>'
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
             . '<tr><td>getCurrentFull()</td><td>' . $this->router->getCurrentFull() . '</td></tr>'
@@ -162,11 +162,11 @@ p { margin: 10px; }
 
     public function getGetResults()
     {
-        if (empty($_GET)) {
+        if (empty($this->router->getGet())) {
             return $this->empty;
         }
         $getResults = '<span class="full">';
-        foreach ($_GET as $name => $value) {
+        foreach ($this->router->getGet() as $name => $value) {
             $getResults .= htmlentities((string) $name)
                 . ' = ' . htmlentities((string) $value) . '<br />';
         }
