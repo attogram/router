@@ -9,7 +9,7 @@ $router = new Router();
 
 $title = 'Timezone String Control - Attogram Router Examples';
 
-$homeLink = '<a href="' . $router->getHome() . '/../">Attogram Router</a>'
+$homeLink = '<a href="' . $router->getHome() . '../">Attogram Router</a>'
     . ' - <a href="' . $router->getHome() . '">' . $title . '</a>';
 
 $header = '<html lang="en"><head><title>' . $title . '</title></head><body>' . $homeLink . '<hr />';
@@ -42,6 +42,6 @@ if (!@date_default_timezone_set($timeZone)) {
 }
 print $header . '<h1>' . $timeZone . '<br />' . date('r') . '</h1><p>Timezones ';
 foreach (timezone_identifiers_list() as $id) {
-    print ' - <a href="' . $router->getHome() . '/' . $id . '">' . $id . '</a>';
+    print ' - <a href="' . $router->getHome() . $id . '">' . $id . '</a>';
 }
 print '</p>' . $footer;
