@@ -30,7 +30,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.1';
+    const VERSION = '3.0.2.pre.0';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -139,7 +139,12 @@ class Router
      */
     public function getHome(bool $full = false): string
     {
-        return $this->getPreFull($full) . $this->uriBase;
+        $pre = '';
+        if ($full) {
+            $pre = $this->getProtocol()  . '://' . $this->getServerName();
+        }
+
+        return $pre . $this->uriBase;
     }
 
     /**
@@ -149,19 +154,6 @@ class Router
     public function getCurrent(bool $full = false): string
     {
         return $this->getHome($full) . $this->uriRelative;
-    }
-
-    /**
-     * @param bool $full
-     * @return string
-     */
-    private function getPreFull(bool $full = false): string
-    {
-        if ($full) {
-            return $this->getProtocol()  . '://' . $this->getServerName();
-        }
-
-        return '';
     }
 
     /**
