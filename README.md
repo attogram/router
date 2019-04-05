@@ -85,7 +85,36 @@ if (!$control) {
 // Now dispatch based on $control, in whatever manner you wish 
 ```
 
-## Helper functions
+## functions
+
+### allow($route, $control)
+
+Allow and set a control for a route
+
+$route = a string with the URI list, forward-slash delimited
+
+Exact routing:
+ - Home:  '/'
+ - Page:  '/foo/bar'
+   - preceding and trailing slashes are optional, except for top level '/'
+
+Variable routing:
+  - use a question mark to denote a URI segment as a variable
+  - variables are retrieved as an ordered array via: $router->getVars()
+  - Examples:
+    - '/id/?'
+    - '/book/?/chapter/?'
+    - '/foo/?/?/?'
+
+$control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
+ 
+### match()
+Get the control for the current request, or null if no matching request
+- optionally force a trailing slash on the current request
+
+### setForceSlash(true|false)
+Set the optional forcing of a trailing slash on all requests
+- default is false
 
 ### getUriBase()
 Get Base URI: Aka "home" - path with no trailing slash (or empty string)
