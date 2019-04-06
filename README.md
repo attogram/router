@@ -80,11 +80,11 @@ if (!$control) {
       * preceding and trailing slashes are optional, except for top level '/'
   * Variable routing:
     * use a question mark to denote a URI segment as a variable
-    * variables are retrieved via $router->getVar(int $index)
+    * variables are retrieved via `$router->getVar(int $index)`
     * Examples:
-      * '/id/?'
-      * '/book/?/chapter/?'
-      * '/foo/?/?/?'
+      * '/id/?' - retrieve with `getVar(0)`
+      * '/book/?/chapter/?' - retrieve with `getVar(0)` and `getVar(1)`
+      * '/foo/?/?/?' - retrieve with `getVar(0)`, `getVar(1)` and `getVar(2)`
 * $control = anything you want
   * a string, a closure, an array, an object, an int, a float, whatever!
 
@@ -102,11 +102,27 @@ if (!$control) {
 
 ### getHome
 
+`public function getHome(): string`
+
+* Get URL to the installation home
+
 ### getHomeFull
+
+`public function getHomeFull(): string`
+
+* Get URL to the installation home, with protocol and host
 
 ### getCurrent
 
+`public function getCurrent(): string`
+
+* Get URL to the current request
+
 ### getCurrentFull
+
+`public function getCurrentFull(): string`
+
+* Get URL to the current request,  with protocol and host
 
 ### setForceSlash
 
@@ -134,8 +150,21 @@ if (!$control) {
 
 * Get a global _SERVER variable, or empty string if not found
 
-### getHostname
+### getHost
+
+`public function getHost(): string`
+
+* Get the current hostname
+
+### getHostFull
+
+`public function getHostFull(): string`
+
+* Get the current hostname, with protocol and host
 
 ### getProtocol
 
+`public function getProtocol(): string`
+
+* Get the current protocol: `http` or `https`
 ----

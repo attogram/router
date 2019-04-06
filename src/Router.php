@@ -29,9 +29,9 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.0.pre.0';
+    const VERSION = '4.0.0.pre.1';
 
-    private $control        = '';
+    private $control        = null;
     private $forceSlash     = false;
     private $routesExact    = [];
     private $routesVariable = [];
@@ -81,9 +81,9 @@ class Router
      *          - use a question mark to denote a URI segment as a variable
      *          - variables are retrieved via: $router->getVar(int $index)
      *          - Examples:
-     *              '/id/?'
-     *              '/book/?/chapter/?'
-     *              '/foo/?/?/?'
+     *              '/id/?'  - retrieve with getVar(0)
+     *              '/book/?/chapter/?' - retrieve with getVar(0) and getVar(1)
+     *              '/foo/?/?/?' - retrieve with getVar(0), getVar(1) and getVar(2)
      *
      * control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
      *
