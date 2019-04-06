@@ -23,7 +23,7 @@ plugins:
   phpmd:
     enabled: true
     config:
-      ExcessiveClassComplexity:
+      Design/WeightedMethodCount:
         maximum: 55
     checks:
       Controversial/Superglobals:
