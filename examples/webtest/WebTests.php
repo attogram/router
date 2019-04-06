@@ -13,11 +13,15 @@ class WebTests
     /** @var array */
     public $tests = [];
 
+    /** @var float */
+    public $timer;
+
     /**
      * @param array $tests
      */
     public function __construct(array $tests)
     {
+        $this->timer = microtime(true);
         session_start();
         $this->tests = $tests;
         $this->setupRouter();
@@ -139,6 +143,8 @@ p { margin: 10px; }
             . "<tr><td>getServer('HTTPS')</td><td>" . $this->router->getServer('HTTPS') . '</td></tr>'
             . "<tr><td>getServer('SERVER_PORT')</td><td>" . $this->router->getServer('SERVER_PORT') . '</td></tr>'
             . '<tr><td>getGet()</td><td>' . $this->getGetResults() . '</td></tr>'
+            . '<tr><td>auto_globals_jit</td><td>' . (ini_get('auto_globals_jit') ? 'true' : 'false') . '</td></tr>'
+            . '<tr><td>test time</td><td>' . $this->timer . '</td></tr>'
             . '</table>'
             . '<p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
@@ -147,6 +153,7 @@ p { margin: 10px; }
     public function getMatchResults()
     {
         $match = $this->router->match();
+        $this->timer = microtime(true) - $this->timer;
         switch ($match) {
             case '':
                 return '';
