@@ -361,12 +361,12 @@ class Router
         if ($array[0] === '') { // If first segment is empty
             array_shift($array); // trim off first segment
         }
+
         if (count($array) <= 1) { // If array has 1 or less segments
             return $array;
         }
         if ($array[count($array)-1] === '') { // If last segment is empty
-            array_reverse($array);
-            array_shift($array); // trim off last segment
+            array_pop($array); // trim off last segment
         }
 
         return $array;
