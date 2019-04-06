@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.6.pre.0';
+    const VERSION = '3.0.6.pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -140,7 +140,7 @@ class Router
      */
     public function getHomeFull(): string
     {
-        return $this->getProtocol() . '://' . $this->getHostname() . $this->getHome();
+        return$this->getHostFull() . $this->getHome();
     }
 
     /**
@@ -156,33 +156,42 @@ class Router
      */
     public function getCurrentFull(): string
     {
-        return $this->getProtocol() . '://' . $this->getHostname() . $this->getCurrent();
+        return $this->getHostFull() . $this->getCurrent();
     }
 
     /**
      * @return string
+     */
+    public function getHost(): string
+    {
+        $serverName = $this->getServer('SERVER_NAME');
+        $serverPort = $this->getServer('SERVER_PORT');
+
+        return $serverName . (!in_array((int) $serverPort, [80, 443]) ? ':' . $serverPort : '');
+    }
+
+    /**
+     * @return string
+     */
+    public function getHostFull(): string
+    {
+        return $this->getProtocol() . '://' . $this->getHost();
+    }
+
+    /**
+     * @return string - 'http' or 'https'
      */
     public function getProtocol(): string
     {
+        $https = $this->getServer('HTTPS');
+        $serverPort = $this->getServer('SERVER_PORT');
+
         return (
-            (!empty($this->getServer('HTTPS')) && ($this->getServer('HTTPS') !== 'off'))
-            || ($this->getServer('SERVER_PORT') == 443)
+            (!empty($https) && ($https !== 'off'))
+            || ($serverPort == 443)
         )
             ? 'https'
             : 'http';
-    }
-
-    /**
-     * @return string
-     */
-    public function getHostname(): string
-    {
-        return $this->getServer('SERVER_NAME')
-            . (
-                !in_array((int) $this->getServer('SERVER_PORT'), [80, 443])
-                    ? ':' . $this->getServer('SERVER_PORT')
-                    : ''
-            );
     }
 
     /**
@@ -286,12 +295,13 @@ class Router
      */
     private function forceSlash()
     {
+        $queryString = $this->getServer('QUERY_STRING');
         // add a trailing slash to the current URL
         $url = $this->uriBase . $this->uriRelative . '/';
         // if there is a query string in the current request
-        if (!empty($this->getServer('QUERY_STRING'))) {
+        if (!empty($queryString)) {
             // add the query string to the redirect URL
-            $url .= '?' . $this->getServer('QUERY_STRING');
+            $url .= '?' . $queryString;
         }
         $this->redirect($url);
     }

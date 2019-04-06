@@ -122,16 +122,17 @@ p { margin: 10px; }
         print '<table style="float:left;">'
             . '<tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
             . '<tr><td>match()</td><td>' . $this->getMatchResults() . '</td></tr>'
-            . '<tr><td>geVar(0)</td><td>' .  $this->router->getVar(0) . '</td></tr>'
-            . '<tr><td>geVar(1)</td><td>' .  $this->router->getVar(1) . '</td></tr>'
-            . '<tr><td>geVar(2)</td><td>' .  $this->router->getVar(2) . '</td></tr>'
-            . '<tr><td>geVar(3)</td><td>' .  $this->router->getVar(3) . '</td></tr>'
-            . '<tr><td>geVar(4)</td><td>' .  $this->router->getVar(4) . '</td></tr>'
+            . '<tr><td>getVar(0)</td><td>' .  $this->router->getVar(0) . '</td></tr>'
+            . '<tr><td>getVar(1)</td><td>' .  $this->router->getVar(1) . '</td></tr>'
+            . '<tr><td>getVar(2)</td><td>' .  $this->router->getVar(2) . '</td></tr>'
+            . '<tr><td>getVar(3)</td><td>' .  $this->router->getVar(3) . '</td></tr>'
+            . '<tr><td>getVar(4)</td><td>' .  $this->router->getVar(4) . '</td></tr>'
             . '<tr><td>getCurrent()</td><td>' . $this->router->getCurrent() . '</td></tr>'
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
             . '<tr><td>getCurrentFull()</td><td>' . $this->router->getCurrentFull() . '</td></tr>'
             . '<tr><td>getHomeFull()</td><td>' . $this->router->getHomeFull() . '</td></tr>'
-            . '<tr><td>getHostname()</td><td>' . $this->router->getHostname() . '</td></tr>'
+            . '<tr><td>getHost()</td><td>' . $this->router->getHost() . '</td></tr>'
+            . '<tr><td>getHostFull()</td><td>' . $this->router->getHostFull() . '</td></tr>'
             . '<tr><td>getProtocol()</td><td>' . $this->router->getProtocol() . '</td></tr>'
             . '<tr><td>VERSION</td><td>' . Router::VERSION . '</td></tr>'
             . '<tr><td>forceSlash</td><td>'
@@ -144,7 +145,7 @@ p { margin: 10px; }
             . "<tr><td>getServer('SERVER_PORT')</td><td>" . $this->router->getServer('SERVER_PORT') . '</td></tr>'
             . '<tr><td>getGet()</td><td>' . $this->getGetResults() . '</td></tr>'
             . '<tr><td>auto_globals_jit</td><td>' . (ini_get('auto_globals_jit') ? 'true' : 'false') . '</td></tr>'
-            . '<tr><td>test time</td><td>' . $this->timer . '</td></tr>'
+            . '<tr><td>Benchmark time</td><td>' . $this->timer . '</td></tr>'
             . '</table>'
             . '<p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
@@ -154,12 +155,8 @@ p { margin: 10px; }
     {
         $match = $this->router->match();
         $this->timer = microtime(true) - $this->timer;
-        switch ($match) {
-            case '':
-                return '';
-            default:
-                return '<span class="full">(' . gettype($match) . ') ' . print_r($match, true) . '</span>';
-        }
+
+        return '(' . gettype($match) . ') ' . print_r($match, true);
     }
 
     public function getGetResults()
@@ -167,12 +164,12 @@ p { margin: 10px; }
         if (empty($this->router->getGet())) {
             return '';
         }
-        $getResults = '<span class="full">';
+        $getResults = '';
         foreach ($this->router->getGet() as $name => $value) {
             $getResults .= htmlentities((string) $name)
                 . ' = ' . htmlentities((string) $value) . '<br />';
         }
 
-        return $getResults . '</span>';
+        return $getResults;
     }
 }
