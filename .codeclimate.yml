@@ -29,7 +29,8 @@ plugins:
       Design/ExitExpression:
         enabled: false # allow exit in redirect()
       Design/WeightedMethodCount:
-        enabled: false # disable until setup for maximum: 55
+        enabled: true
+        maximum: 55
   phan:
     enabled: true
     checks:
