@@ -13,8 +13,6 @@ class WebTests
     /** @var array */
     public $tests = [];
 
-    private $empty = '<span class="empty">empty</span>';
-
     /**
      * @param array $tests
      */
@@ -28,6 +26,7 @@ class WebTests
         $this->pageHeader();
         $this->testResults();
         $this->testList();
+        print '<br style="clear:both;" />';
         $this->pageHeader();
         $this->htmlFooter();
     }
@@ -129,11 +128,17 @@ p { margin: 10px; }
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
             . '<tr><td>getCurrentFull()</td><td>' . $this->router->getCurrentFull() . '</td></tr>'
             . '<tr><td>getHomeFull()</td><td>' . $this->router->getHomeFull() . '</td></tr>'
-            . '<tr><td>getServerName()</td><td>' . $this->router->getServerName() . '</td></tr>'
+            . '<tr><td>getHostname()</td><td>' . $this->router->getHostname() . '</td></tr>'
             . '<tr><td>getProtocol()</td><td>' . $this->router->getProtocol() . '</td></tr>'
             . '<tr><td>VERSION</td><td>' . Router::VERSION . '</td></tr>'
             . '<tr><td>forceSlash</td><td>'
-            . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
+                . ((isset($_SESSION['forceSlash']) && $_SESSION['forceSlash']) ? 'true' : 'false') . '</td></tr>'
+            . "<tr><td>getServer('REQUEST_URI')</td><td>" . $this->router->getServer('REQUEST_URI') . '</td></tr>'
+            . "<tr><td>getServer('QUERY_STRING')</td><td>" . $this->router->getServer('QUERY_STRING') . '</td></tr>'
+            . "<tr><td>getServer('SCRIPT_NAME')</td><td>" . $this->router->getServer('SCRIPT_NAME') . '</td></tr>'
+            . "<tr><td>getServer('SERVER_NAME')</td><td>" . $this->router->getServer('SERVER_NAME') . '</td></tr>'
+            . "<tr><td>getServer('HTTPS')</td><td>" . $this->router->getServer('HTTPS') . '</td></tr>'
+            . "<tr><td>getServer('SERVER_PORT')</td><td>" . $this->router->getServer('SERVER_PORT') . '</td></tr>'
             . '</table>'
             . '<p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
@@ -144,7 +149,7 @@ p { margin: 10px; }
         $match = $this->router->match();
         switch ($match) {
             case '':
-                return $this->empty;
+                return '';
             default:
                 return '<span class="full">(' . gettype($match) . ') ' . print_r($match, true) . '</span>';
         }
@@ -153,7 +158,7 @@ p { margin: 10px; }
     public function getGetResults()
     {
         if (empty($this->router->getGet())) {
-            return $this->empty;
+            return '';
         }
         $getResults = '<span class="full">';
         foreach ($this->router->getGet() as $name => $value) {

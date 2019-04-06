@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.4';
+    const VERSION = '3.0.5.pre.0';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -135,7 +135,7 @@ class Router
      */
     public function getHomeFull(): string
     {
-        return $this->getProtocol() . '://' . $this->getServerName() . $this->getHome();
+        return $this->getProtocol() . '://' . $this->getHostname() . $this->getHome();
     }
 
     /**
@@ -151,7 +151,7 @@ class Router
      */
     public function getCurrentFull(): string
     {
-        return $this->getProtocol() . '://' . $this->getServerName() . $this->getCurrent();
+        return $this->getProtocol() . '://' . $this->getHostname() . $this->getCurrent();
     }
 
     /**
@@ -170,7 +170,7 @@ class Router
     /**
      * @return string
      */
-    public function getServerName(): string
+    public function getHostname(): string
     {
         return $this->getServer('SERVER_NAME')
             . (

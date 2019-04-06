@@ -114,4 +114,7 @@ if (!$control) {
 `public function getServer(string $name = '')`
 * Get a global _SERVER variable, or empty string if not found
 
+### getHostname
+### getProtocol
+
 ----
