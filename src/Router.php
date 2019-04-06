@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.5';
+    const VERSION = '3.0.6.pre.0';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -255,17 +255,17 @@ class Router
      */
     private function getGlobal(string $global, string $name)
     {
-        if (!isset($GLOBALS) || !isset($GLOBALS[$global]) || !is_array($GLOBALS[$global])) {
-            return ''; // Global does not exist, or is not array
+        if (!isset($GLOBALS[$global]) // Global does not exist
+            || !is_array($GLOBALS[$global]) // Global is not an array
+            || ($name && !isset($GLOBALS[$global][$name])) // Global variable does not exist
+        ) {
+            return '';
         }
         if (!$name) {
             return $GLOBALS[$global]; // return entire Global array
         }
-        if (!empty($GLOBALS[$global][$name])) {
-            return $GLOBALS[$global][$name]; // return requested Global variable
-        }
 
-        return ''; // Not Found or Empty
+        return $GLOBALS[$global][$name]; // return requested Global variable
     }
 
     /**
