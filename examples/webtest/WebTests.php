@@ -123,7 +123,6 @@ p { margin: 10px; }
             . '<tr><td>geVar(2)</td><td>' .  $this->router->getVar(2) . '</td></tr>'
             . '<tr><td>geVar(3)</td><td>' .  $this->router->getVar(3) . '</td></tr>'
             . '<tr><td>geVar(4)</td><td>' .  $this->router->getVar(4) . '</td></tr>'
-            . '<tr><td>getGet()</td><td>' . $this->getGetResults() . '</td></tr>'
             . '<tr><td>getCurrent()</td><td>' . $this->router->getCurrent() . '</td></tr>'
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
             . '<tr><td>getCurrentFull()</td><td>' . $this->router->getCurrentFull() . '</td></tr>'
@@ -139,6 +138,7 @@ p { margin: 10px; }
             . "<tr><td>getServer('SERVER_NAME')</td><td>" . $this->router->getServer('SERVER_NAME') . '</td></tr>'
             . "<tr><td>getServer('HTTPS')</td><td>" . $this->router->getServer('HTTPS') . '</td></tr>'
             . "<tr><td>getServer('SERVER_PORT')</td><td>" . $this->router->getServer('SERVER_PORT') . '</td></tr>'
+            . '<tr><td>getGet()</td><td>' . $this->getGetResults() . '</td></tr>'
             . '</table>'
             . '<p>[ Router setup: '
             . '<a href="?forceSlash=1">Force Slash</a> - <a href="?forceSlash=0">Do Not Force Slash</a> ]</p>';
