@@ -16,22 +16,6 @@ new WebTests([
         ],
     ],
     [
-        'route' => '/foo/',
-        'control' => 'with-slash',
-        'test' => [
-            '/foo/',
-            '/foo/?alpha=beta&gamma=omega',
-        ],
-    ],
-    [
-        'route' => '/foo',
-        'control' => 'no-slash',
-        'test' => [
-            '/foo',
-            '/foo?alpha=beta&gamma=omega',
-        ],
-    ],
-    [
         'route' => '/exact/',
         'control' => 'exact-route',
         'test' => ['/exact'],
@@ -93,5 +77,21 @@ new WebTests([
         return 'hello world';
     },
         'test' => ['/closure/'],
+    ],
+    [
+        'route' => '/foo/',
+        'control' => 'with-slash',
+        'test' => [
+            '/foo/',
+            '/foo/?alpha=beta&gamma=omega',
+        ],
+    ],
+    [
+        'route' => '/foo',
+        'control' => 'no-slash',
+        'test' => [
+            '/foo',
+            '/foo?alpha=beta&gamma=omega',
+        ],
     ],
 ]);
