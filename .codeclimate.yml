@@ -53,7 +53,7 @@ plugins:
       PhanUndeclaredTypeParameter:
         enabled: false
       PhanUnusedVariable:
-        enabled: false // allow unused $_SERVER; when needed to override auto_globals_jit
+        enabled: false # allow unused $_SERVER; when needed to override auto_globals_jit
   duplication:
     enabled: true
     config:
