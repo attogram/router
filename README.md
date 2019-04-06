@@ -48,7 +48,7 @@ $router->allow('/', 'home');
 $router->allow('/foo/bar', 'foobar');
 $router->allow('/pi', 3.141);
 $router->allow('/hello', function () { print 'world'; });
-$router->allow('/book/?/chapter/?', function (Router $router) { 
+$router->allow('/book/?/chapter/?', function (Router $router) {
     $book = $router->getVar(0);
     $chapter = $router->getVar(1);
 });
@@ -70,27 +70,33 @@ if (!$control) {
 ### allow
 
 `public function allow(string $route, $control)`
+
 * Allow and set a control for a route
 * $route = a string with the URI list, forward-slash delimited
   * Exact routing:
-    - Home:  '/'
-    - Page:  '/foo/bar'
-      - preceding and trailing slashes are optional, except for top level '/'
+    * Home:  '/'
+    * Page:  '/foo/bar'
+      * preceding and trailing slashes are optional, except for top level '/'
   * Variable routing:
-    - use a question mark to denote a URI segment as a variable
-    - variables are retrieved via $router->getVar(int $index)
-    - Examples:
-      - '/id/?'
-      - '/book/?/chapter/?'
-      - '/foo/?/?/?'
-* $control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
+    * use a question mark to denote a URI segment as a variable
+    * variables are retrieved via $router->getVar(int $index)
+    * Examples:
+      * '/id/?'
+      * '/book/?/chapter/?'
+      * '/foo/?/?/?'
+* $control = anything you want
+  - a string, a closure, an array, an object, an int, a float, whatever!
  
 ### match
+
 `public function match()`
+
 * Get the control for the current request, or null if no matching request
 
 ### getVar
+
 `public function getVar(int $index = 0)`
+
 * Get a URI segment variable, by index.  Starting at 0.
 
 ### getHome
@@ -102,21 +108,30 @@ if (!$control) {
 ### getCurrentFull
 
 ### setForceSlash
+
 `public function setForceSlash(bool $forceSlash)`
- * Sets the optional forcing of a trailing slash on all requests
- * by default is false
+
+* Sets the optional forcing of a trailing slash on all requests
+* by default is false
 
 ### redirect
+
 `public function redirect(string $url, int $httpResponseCode = 301)`
- * Redirect to a new url and exit
- * optionally set a response code (301 = permanent, 302 = moved)
+
+* Redirect to a new url and exit
+* optionally set a response code (301 = permanent, 302 = moved)
+
 ### getGet
+
 `public function getGet(string $name = '')`
- * Get a global _GET variable, or empty string if not found
+
+* Get a global _GET variable, or empty string if not found
 
 ### getServer
+
 `public function getServer(string $name = '')`
- * Get a global _SERVER variable, or empty string if not found
+
+* Get a global _SERVER variable, or empty string if not found
 
 ### getHostname
 
