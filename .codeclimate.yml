@@ -22,46 +22,40 @@ plugins:
       standard: "PSR1,PSR2"
   phpmd:
     enabled: true
-#    config:
-#      Design/WeightedMethodCount:
-#        maximum: 55
     checks:
       Controversial/Superglobals:
         enabled: false # allow $GLOBALS in getGlobal(), $_SERVER in __construct()
       Design/ExitExpression:
         enabled: false # allow exit in redirect()
-      Design/WeightedMethodCount:
-        enabled: true
-        maximum: 55
   phan:
     enabled: true
     checks:
-      PhanTypeMismatchArgument:
-        enabled: false
-      PhanTypeMismatchForeach:
-        enabled: false       
-      PhanTypeMismatchProperty:
-        enabled: false
-      PhanUndeclaredClass:
-        enabled: false
-      PhanUndeclaredClassCatch:
-        enabled: false
-      PhanUndeclaredClassConstant:
-        enabled: false
-      PhanUndeclaredClassInstanceof:
-        enabled: false
-      PhanUndeclaredClassMethod:
-        enabled: false
-      PhanUndeclaredExtendedClass:
-        enabled: false
-      PhanUndeclaredInterface:
-        enabled: false
-      PhanUndeclaredMethod:
-        enabled: false
-      PhanUndeclaredProperty:
-        enabled: false
-      PhanUndeclaredTypeParameter:
-        enabled: false
+#      PhanTypeMismatchArgument:
+#        enabled: false
+#      PhanTypeMismatchForeach:
+#        enabled: false
+#      PhanTypeMismatchProperty:
+#        enabled: false
+#      PhanUndeclaredClass:
+#        enabled: false
+#      PhanUndeclaredClassCatch:
+#        enabled: false
+#      PhanUndeclaredClassConstant:
+#        enabled: false
+#      PhanUndeclaredClassInstanceof:
+#        enabled: false
+#      PhanUndeclaredClassMethod:
+#        enabled: false
+#      PhanUndeclaredExtendedClass:
+#        enabled: false
+#      PhanUndeclaredInterface:
+#        enabled: false
+#      PhanUndeclaredMethod:
+#        enabled: false
+#      PhanUndeclaredProperty:
+#        enabled: false
+#      PhanUndeclaredTypeParameter:
+#        enabled: false
       PhanNoopVariable:
         enabled: false # allow unused $_SERVER; when needed to override auto_globals_jit
   duplication:
