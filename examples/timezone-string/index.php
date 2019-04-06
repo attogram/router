@@ -12,7 +12,9 @@ $title = 'Timezone String Control - Attogram Router Examples';
 $homeLink = '<a href="' . $router->getHome() . '../">Attogram Router</a>'
     . ' - <a href="' . $router->getHome() . '">' . $title . '</a>';
 
-$header = '<html lang="en"><head><title>' . $title . '</title></head><body>' . $homeLink . '<hr />';
+$header = '<html lang="en"><head><title>' . $title . '</title>'
+    . '<style>a { text-decoration:none; }</style>'
+    . '</head><body>' . $homeLink . '<hr />';
 $footer = '<footer><hr />' . $homeLink . '</footer></body></html>';
 
 $router->allow('/', 'timezones');
