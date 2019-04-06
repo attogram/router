@@ -40,9 +40,13 @@ plugins:
     enabled: true
     config:
       minimum_severity: major # info, minor, major (default), critical, blocker
-#    checks:
-#      php:S1448: # number of methods in class
-#        enabled: false
+    checks:
+      php:S1448: # number of methods in class
+       enabled: true
+       threshold: 25
+      php:S1192: # Define a constant instead of duplicating literal
+        enabled: true
+        threshold: 4
   duplication:
     enabled: true
     config:
