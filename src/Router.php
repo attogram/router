@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.5.pre.0';
+    const VERSION = '3.0.5.pre.1';
 
     private $control        = '';
     private $forceSlash     = false;
@@ -46,8 +46,6 @@ class Router
      */
     public function __construct()
     {
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $_SERVER; // Bypass auto_globals_jit and populate _SERVER into GLOBALS
         // Get the Base of the URI, without 'index.php'
         $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
         // make Relative URI - remove query string from the request (everything after ?)
@@ -60,6 +58,11 @@ class Router
         $this->uri = $this->getUriArray($this->uriRelative);
         // directory depth of current request
         $this->uriCount = count($this->uri);
+        // If needed, Bypass directive auto_globals_jit
+        if (!isset($GLOBALS['_SERVER'])) {
+            /** @noinspection PhpExpressionResultUnusedInspection */
+            $_SERVER; // force compiler to populate _SERVER into GLOBALS
+        }
     }
 
     /**
