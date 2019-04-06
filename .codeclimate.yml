@@ -4,6 +4,7 @@
 version: "2"
 exclude_patterns:
 - "vendor/"
+- "examples/"
 checks:
   method-complexity:
     config:
@@ -27,6 +28,8 @@ plugins:
         enabled: false # allow $GLOBALS in getGlobal(), $_SERVER in __construct()
       Design/ExitExpression:
         enabled: false # allow exit in redirect()
+      Design/WeightedMethodCount:
+        enabled: false # disable until setup for maximum: 55
   phan:
     enabled: true
     checks:
@@ -36,6 +39,9 @@ plugins:
     enabled: true
     config:
       minimum_severity: major # info, minor, major (default), critical, blocker
+#    checks:
+#      php:S1448: # number of methods in class
+#        enabled: false
   duplication:
     enabled: true
     config:
@@ -49,4 +55,6 @@ plugins:
   fixme:
     enabled: true
   git-legal:
+    enabled: true
+  markdownlint:
     enabled: true
