@@ -1,6 +1,7 @@
 # Attogram Router
 
-Welcome to the Attogram Router for PHP 7 - Small, Flexible, One class, and Composer ready.
+Welcome to the Attogram Router for PHP 7 - 
+Small, Flexible, One class, and Composer ready.
 
 [![Attogram Router](https://raw.githubusercontent.com/attogram/attogram-docs/master/router/attogram.router.250.png)](https://github.com/attogram/router)
 
@@ -85,8 +86,8 @@ if (!$control) {
       * '/book/?/chapter/?'
       * '/foo/?/?/?'
 * $control = anything you want
-  - a string, a closure, an array, an object, an int, a float, whatever!
- 
+  * a string, a closure, an array, an object, an int, a float, whatever!
+
 ### match
 
 `public function match()`
