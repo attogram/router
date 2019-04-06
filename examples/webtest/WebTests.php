@@ -21,7 +21,6 @@ class WebTests
      */
     public function __construct(array $tests)
     {
-        $this->timer = microtime(true);
         session_start();
         $this->tests = $tests;
         $this->setupRouter();
@@ -46,6 +45,7 @@ class WebTests
 
     public function setupRouter()
     {
+        $this->timer = microtime(true);
         $this->router = new Router();
         if (isset($_SESSION['forceSlash'])) {
             $this->router->setForceSlash((bool)$_SESSION['forceSlash']);
