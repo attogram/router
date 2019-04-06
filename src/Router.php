@@ -1,6 +1,6 @@
 <?php
 /**
- * The Attogram Router for PHP 7
+ * The Attogram Router for PHP 7 - small, flexible, and surprisingly powerful
  *
  * @see https://github.com/attogram/router
  * @see https://getitdaily.com/attogram-router/
@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '3.0.6';
+    const VERSION = '4.0.0.pre.0';
 
     private $control        = '';
     private $forceSlash     = false;

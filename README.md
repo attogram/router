@@ -1,7 +1,7 @@
 # Attogram Router
 
 Welcome to the Attogram Router for PHP 7 -
-Small, Flexible, One class, and Composer ready.
+small, flexible, and surprisingly powerful.
 
 [![Attogram Router](https://raw.githubusercontent.com/attogram/attogram-docs/master/router/attogram.router.250.png)](https://github.com/attogram/router)
 

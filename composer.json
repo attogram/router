@@ -1,6 +1,6 @@
 {
     "name": "attogram/router",
-    "description": "Attogram Router for PHP 7 - Small, Flexible, One class, and Composer ready",
+    "description": "Attogram Router for PHP 7 - small, flexible, and surprisingly powerful",
     "keywords": ["router", "PHP 7", "One class"],
     "homepage": "https://github.com/attogram/router",
     "support": {
