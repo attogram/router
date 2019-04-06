@@ -46,6 +46,8 @@ class Router
      */
     public function __construct()
     {
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $_SERVER; // Bypass auto_globals_jit and populate _SERVER into GLOBALS
         // Get the Base of the URI, without 'index.php'
         $this->uriBase = strtr($this->getServer('SCRIPT_NAME'), ['index.php' => '']);
         // make Relative URI - remove query string from the request (everything after ?)
