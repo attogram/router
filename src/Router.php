@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.2.pre.0';
+    const VERSION = '4.0.2.pre.1';
 
     private $control        = null;
     private $forceSlash     = false;
@@ -343,6 +343,10 @@ class Router
     {
         $this->vars = [];
         foreach ($routeUri as $index => $route) {
+            if (!in_array($route, ['?', $this->uri[$index]])) {
+                $this->vars = [];
+                return; // match failed - no exact match, no variable match
+            }
             if ($route === '?') { // found a variable
                 $this->vars[] = $this->uri[$index];
             }
