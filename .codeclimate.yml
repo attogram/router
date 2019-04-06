@@ -1,4 +1,6 @@
-# attogram/router - codeclimate checks
+# Attogram Router - https://github.com/attogram/router
+# codeclimate checks - https://codeclimate.com/github/attogram/router
+#
 version: "2"
 exclude_patterns:
 - "vendor/"
@@ -8,7 +10,7 @@ checks:
       threshold: 5
   method-count:
     config:
-      threshold: 22
+      threshold: 25
   method-lines:
     config:
       threshold: 30
@@ -20,9 +22,11 @@ plugins:
       standard: "PSR1,PSR2"
   phpmd:
     enabled: true
+    config:
+      ExcessiveClassComplexity: 55
     checks:
       Controversial/Superglobals:
-        enabled: false # allow $GLOBALS in getGlobal()
+        enabled: false # allow $GLOBALS in getGlobal(), $_SERVER in __construct()
   phan:
     enabled: true
     checks:
