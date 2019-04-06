@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.1';
+    const VERSION = '4.0.2.pre.0';
 
     private $control        = null;
     private $forceSlash     = false;
