@@ -74,7 +74,7 @@ class Router
      *
      *      Variable routing:
      *          - use a question mark to denote a URI segment as a variable
-     *          - variables are retrieved as an ordered array via: $router->getVars()
+     *          - variables are retrieved via: $router->getVar(int $index)
      *          - Examples:
      *              '/id/?'
      *              '/book/?/chapter/?'
@@ -193,17 +193,6 @@ class Router
         }
 
         return null;
-    }
-
-    /**
-     * Get an array of URI variables from the current request
-     *
-     * @return array
-     * @deprecated
-     */
-    public function getVars(): array
-    {
-        return $this->vars;
     }
 
     /**

@@ -119,7 +119,11 @@ p { margin: 10px; }
         print '<table style="float:left;">'
             . '<tr><th colspan="2">Test Results @ ' . gmdate('Y-m-d H:i:s') . ' UTC</th></tr>'
             . '<tr><td>match()</td><td>' . $this->getMatchResults() . '</td></tr>'
-            . '<tr><td>geVars()</td><td>' .  $this->getVarResults() . '</td></tr>'
+            . '<tr><td>geVar(0)</td><td>' .  $this->router->getVar(0) . '</td></tr>'
+            . '<tr><td>geVar(1)</td><td>' .  $this->router->getVar(1) . '</td></tr>'
+            . '<tr><td>geVar(2)</td><td>' .  $this->router->getVar(2) . '</td></tr>'
+            . '<tr><td>geVar(3)</td><td>' .  $this->router->getVar(3) . '</td></tr>'
+            . '<tr><td>geVar(4)</td><td>' .  $this->router->getVar(4) . '</td></tr>'
             . '<tr><td>getGet()</td><td>' . $this->getGetResults() . '</td></tr>'
             . '<tr><td>getCurrent()</td><td>' . $this->router->getCurrent() . '</td></tr>'
             . '<tr><td>getHome()</td><td>' . $this->router->getHome() . '</td></tr>'
@@ -144,19 +148,6 @@ p { margin: 10px; }
             default:
                 return '<span class="full">(' . gettype($match) . ') ' . print_r($match, true) . '</span>';
         }
-    }
-
-    public function getVarResults()
-    {
-        if (empty($this->router->getVars())) {
-            return $this->empty;
-        }
-        $varsResults = '<span class="full">';
-        foreach ($this->router->getVars() as $name => $value) {
-            $varsResults .= "$name = $value<br />";
-        }
-
-        return $varsResults . '</span>';
     }
 
     public function getGetResults()

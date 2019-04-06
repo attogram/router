@@ -18,15 +18,14 @@ $footer = '<footer><hr />' . $homeLink . '</footer></body></html>';
 /** @var Router $router */
 $timeZoneClosure = function ($router) {
     $timeZone = 'UTC';
-    $vars = $router->getVars();
-    if (!empty($vars[0])) {
-        $timeZone = $vars[0];
+    if (!empty($router->getVar(0))) {
+        $timeZone = $router->getVar(0);
     }
-    if (!empty($vars[1])) {
-        $timeZone .= '/' . $vars[1];
+    if (!empty($router->getVar(1))) {
+        $timeZone .= '/' . $router->getVar(1);
     }
-    if (!empty($vars[2])) {
-        $timeZone .= '/' . $vars[2];
+    if (!empty($router->getVar(2))) {
+        $timeZone .= '/' . $router->getVar(2);
     }
     if (!@date_default_timezone_set($timeZone)) {
         header('HTTP/1.0 404 Not Found');

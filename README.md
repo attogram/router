@@ -48,8 +48,8 @@ $router->allow('/foo/bar', 'foobar');
 $router->allow('/pi', 3.141);
 $router->allow('/hello', function () { print 'world'; });
 $router->allow('/book/?/chapter/?', function (Router $router) { 
-    $book = $router->getVars()[0];
-    $chapter = $router->getVars()[1];
+    $book = $router->getVar(0);
+    $chapter = $router->getVar(1);
 });
 
 // Get the $control that matches the current request
@@ -76,7 +76,7 @@ if (!$control) {
       - preceding and trailing slashes are optional, except for top level '/'
   * Variable routing:
     - use a question mark to denote a URI segment as a variable
-    - variables are retrieved as an ordered array via: $router->getVars()
+    - variables are retrieved via $router->getVar(int $index)
     - Examples:
       - '/id/?'
       - '/book/?/chapter/?'
@@ -89,11 +89,7 @@ if (!$control) {
 
 ### getVar
 `public function getVar(int $index = 0)`
-* Get a URI segment variable, by index
-
-### getVars [DEPRECATED]
-`public function getVars(): array`
-* Get URI segment variables: ['foo', 'bar', ...] or empty []
+* Get a URI segment variable, by index.  Starting at 0.
 
 ### getHome
 ### getHomeFull
