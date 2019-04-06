@@ -30,34 +30,12 @@ plugins:
   phan:
     enabled: true
     checks:
-#      PhanTypeMismatchArgument:
-#        enabled: false
-#      PhanTypeMismatchForeach:
-#        enabled: false
-#      PhanTypeMismatchProperty:
-#        enabled: false
-#      PhanUndeclaredClass:
-#        enabled: false
-#      PhanUndeclaredClassCatch:
-#        enabled: false
-#      PhanUndeclaredClassConstant:
-#        enabled: false
-#      PhanUndeclaredClassInstanceof:
-#        enabled: false
-#      PhanUndeclaredClassMethod:
-#        enabled: false
-#      PhanUndeclaredExtendedClass:
-#        enabled: false
-#      PhanUndeclaredInterface:
-#        enabled: false
-#      PhanUndeclaredMethod:
-#        enabled: false
-#      PhanUndeclaredProperty:
-#        enabled: false
-#      PhanUndeclaredTypeParameter:
-#        enabled: false
       PhanNoopVariable:
         enabled: false # allow unused $_SERVER; when needed to override auto_globals_jit
+  sonar-php:
+    enabled: true
+    config:
+      minimum_severity: major # info, minor, major (default), critical, blocker
   duplication:
     enabled: true
     config:
