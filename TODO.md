@@ -2,4 +2,4 @@
 
 * create Test Suite in ./tests
 * new functions
-  * sendHeaders(404)    
+  * sendHeaders(404)
