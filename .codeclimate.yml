@@ -23,7 +23,8 @@ plugins:
   phpmd:
     enabled: true
     config:
-      ExcessiveClassComplexity: 55
+      ExcessiveClassComplexity:
+        maximum: 55
     checks:
       Controversial/Superglobals:
         enabled: false # allow $GLOBALS in getGlobal(), $_SERVER in __construct()
@@ -56,7 +57,7 @@ plugins:
         enabled: false
       PhanUndeclaredTypeParameter:
         enabled: false
-      PhanUnusedVariable:
+      PhanNoopVariable:
         enabled: false # allow unused $_SERVER; when needed to override auto_globals_jit
   duplication:
     enabled: true
