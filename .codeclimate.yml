@@ -28,9 +28,9 @@ plugins:
         enabled: false # allow $GLOBALS in getGlobal(), $_SERVER in __construct()
       Design/ExitExpression:
         enabled: false # allow exit in redirect()
-      Design/WeightedMethodCount:
-        enabled: true
-        maximum: 55
+#      Design/WeightedMethodCount:
+#        enabled: true
+#        maximum: 55
   phan:
     enabled: true
     checks:
@@ -40,17 +40,15 @@ plugins:
     enabled: true
     config:
       minimum_severity: major # info, minor, major (default), critical, blocker
-    checks:
-      # rule.php.S1448.param.maximumMethodThreshold=The maximum number of methods
-      # rule.php.S1448.param.countNonpublicMethods=Whether or not to include non-public methods in the count
-      php:S1448: # number of methods in class
-        enabled: true
-        param:
-          maximumMethodThreshold: 25
-          countNonpublicMethods: true
-      php:S1192: # Define a constant instead of duplicating literal
-        enabled: true
-        threshold: 4
+#    checks:
+#      php:S1448: # number of methods in class
+#        enabled: true
+#        param:
+#          maximumMethodThreshold: 25
+#          countNonpublicMethods: true
+#      php:S1192: # Define a constant instead of duplicating literal
+#        enabled: true
+#        threshold: 4
   duplication:
     enabled: true
     config:
