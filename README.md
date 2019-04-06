@@ -1,7 +1,6 @@
 # Attogram Router
 
-Welcome to the Attogram Router 
-for PHP 7 - Small, Flexible, One class, and Composer ready.
+Welcome to the Attogram Router for PHP 7 - Small, Flexible, One class, and Composer ready.
 
 [![Attogram Router](https://raw.githubusercontent.com/attogram/attogram-docs/master/router/attogram.router.250.png)](https://github.com/attogram/router)
 
@@ -20,12 +19,13 @@ License: `MIT`
 
 ## Examples
 
-* live demo: https://getitdaily.com/attogram-router/
-* demo source: https://github.com/attogram/router/tree/master/examples
+* live demo: <https://getitdaily.com/attogram-router/>
+* demo source: <https://github.com/attogram/router/tree/master/examples>
 
 ## Usage
 
 Setup URL rewriting. For example with Apache `.htaccess`:
+
 ```
 Options +FollowSymLinks
 RewriteEngine On
@@ -35,6 +35,7 @@ RewriteRule ^ index.php [L]
 ```
 
 Create your `index.php`.  For example:
+
 ```php
 use Attogram\Router\Router;
 
@@ -53,7 +54,7 @@ $router->allow('/book/?/chapter/?', function (Router $router) {
 });
 
 // Get the $control that matches the current request
-$control = $router->match(); 
+$control = $router->match();
 
 // If no match, $control is null
 if (!$control) {
@@ -61,12 +62,13 @@ if (!$control) {
     exit;
 }
 
-// Now dispatch based on $control, in whatever manner you wish 
+// Now dispatch based on $control, in whatever manner you wish
 ```
 
 ## Functions
 
 ### allow
+
 `public function allow(string $route, $control)`
 * Allow and set a control for a route
 * $route = a string with the URI list, forward-slash delimited
@@ -92,29 +94,32 @@ if (!$control) {
 * Get a URI segment variable, by index.  Starting at 0.
 
 ### getHome
+
 ### getHomeFull
 
 ### getCurrent
+
 ### getCurrentFull
 
 ### setForceSlash
 `public function setForceSlash(bool $forceSlash)`
-* Sets the optional forcing of a trailing slash on all requests
-* by default is false
+ * Sets the optional forcing of a trailing slash on all requests
+ * by default is false
 
 ### redirect
 `public function redirect(string $url, int $httpResponseCode = 301)`
-* Redirect to a new url and exit
-* optionally set a response code (301 = permanent, 302 = moved)
+ * Redirect to a new url and exit
+ * optionally set a response code (301 = permanent, 302 = moved)
 ### getGet
 `public function getGet(string $name = '')`
-* Get a global _GET variable, or empty string if not found
+ * Get a global _GET variable, or empty string if not found
 
 ### getServer
 `public function getServer(string $name = '')`
-* Get a global _SERVER variable, or empty string if not found
+ * Get a global _SERVER variable, or empty string if not found
 
 ### getHostname
+
 ### getProtocol
 
 ----
