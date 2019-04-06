@@ -92,6 +92,7 @@ p { margin: 10px; }
         print '<div class="hdr">'
             . '<h1>Attogram Router Web Tests</h1>'
             . '<br /><a href="' . $this->router->getHome() . '">RESET test</a>'
+            . ' - <a href="' . $this->router->getHome() . '../">About</a>'
             . ' - <a target="_blank" href="https://github.com/' . $name . '">Github</a>'
             . ' - <a target="_blank" href="https://getitdaily.com/attogram-router/">Getitdaily</a>'
             . ' - <a target="_blank" href="https://packagist.org/packages/' . $name . '">Packagist</a>'
