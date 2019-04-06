@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.0';
+    const VERSION = '4.0.1.pre.0';
 
     private $control        = null;
     private $forceSlash     = false;
@@ -81,9 +81,9 @@ class Router
      *          - use a question mark to denote a URI segment as a variable
      *          - variables are retrieved via: $router->getVar(int $index)
      *          - Examples:
-     *              '/id/?'  - retrieve with getVar(0)
+     *              '/id/?'             - retrieve with getVar(0)
      *              '/book/?/chapter/?' - retrieve with getVar(0) and getVar(1)
-     *              '/foo/?/?/?' - retrieve with getVar(0), getVar(1) and getVar(2)
+     *              '/foo/?/?/?'        - retrieve with getVar(0), getVar(1) and getVar(2)
      *
      * control = anything you want, a string, a closure, an array, an object, an int, a float, whatever!
      *
@@ -238,20 +238,6 @@ class Router
     }
 
     /**
-     * Redirect to a new URL, and exit
-     *  - optionally set HTTP Response Code (301 = Moved Permanently, 302 = Found)
-     *
-     * @param string $url
-     * @param int $httpResponseCode
-     */
-    public function redirect(string $url, int $httpResponseCode = 301)
-    {
-        header('Location: ' . $url, true, $httpResponseCode);
-
-        exit; // After a redirect, we must exit to halt any further script execution
-    }
-
-    /**
      * get a value from a global array, or the whole global array
      *
      * @param string $global
@@ -287,15 +273,29 @@ class Router
      */
     private function forceSlash()
     {
-        $queryString = $this->getServer('QUERY_STRING');
         // add a trailing slash to the current URL
-        $url = $this->uriBase . $this->uriRelative . '/';
+        $url = $this->getCurrentFull() . '/';
         // if there is a query string in the current request
+        $queryString = $this->getServer('QUERY_STRING');
         if (!empty($queryString)) {
             // add the query string to the redirect URL
             $url .= '?' . $queryString;
         }
         $this->redirect($url);
+    }
+
+    /**
+     * Redirect to a new URL, and exit
+     *  - optionally set HTTP Response Code (301 = Moved Permanently, 302 = Found)
+     *
+     * @param string $url
+     * @param int $httpResponseCode
+     */
+    public function redirect(string $url, int $httpResponseCode = 301)
+    {
+        header('Location: ' . $url, true, $httpResponseCode);
+
+        exit; // After a redirect, we must exit to halt any further script execution
     }
 
     /**
@@ -335,7 +335,7 @@ class Router
     }
 
     /**
-     * Populates $this->vars if a variable match is found
+     * Populate an ordered array of URI segment variables
      *
      * @param array $routeUri
      */
@@ -343,11 +343,6 @@ class Router
     {
         $this->vars = [];
         foreach ($routeUri as $index => $route) {
-            if (!in_array($route, ['?', $this->uri[$index]])) {
-                $this->vars = [];
-
-                return; // match failed - no exact match, no variable match
-            }
             if ($route === '?') { // found a variable
                 $this->vars[] = $this->uri[$index];
             }
@@ -363,14 +358,15 @@ class Router
     private function getUriArray(string $uri): array
     {
         $array = explode('/', $uri);
-        if ($array[0] === '') { // trim off first empty element
-            array_shift($array);
+        if ($array[0] === '') { // If first segment is empty
+            array_shift($array); // trim off first segment
         }
-        if (count($array) <= 1) {
+        if (count($array) <= 1) { // If array has 1 or less segments
             return $array;
         }
-        if ($array[count($array)-1] === '') { // trim off last empty element
-            array_pop($array);
+        if ($array[count($array)-1] === '') { // If last segment is empty
+            array_reverse($array);
+            array_shift($array); // trim off last segment
         }
 
         return $array;
