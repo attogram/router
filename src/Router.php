@@ -202,11 +202,7 @@ class Router
      */
     public function getVar(int $index = 0)
     {
-        if (isset($this->vars[$index])) {
-            return $this->vars[$index];
-        }
-
-        return null;
+        return isset($this->vars[$index]) ? $this->vars[$index] : null;
     }
 
     /**
@@ -283,11 +279,7 @@ class Router
      */
     private function hasTrailingSlash(string $uri): bool
     {
-        if (1 === preg_match('#/$#', $uri)) {
-            return true;
-        }
-
-        return false;
+        return (1 === preg_match('#/$#', $uri)) ? true : false;
     }
 
     /**
