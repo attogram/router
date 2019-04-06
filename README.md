@@ -167,4 +167,5 @@ if (!$control) {
 `public function getProtocol(): string`
 
 * Get the current protocol: `http` or `https`
+
 ----
