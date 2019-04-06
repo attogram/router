@@ -22,14 +22,14 @@ plugins:
       standard: "PSR1,PSR2"
   phpmd:
     enabled: true
+    config:
+      ExcessiveClassComplexity:
+        maximum: 55
     checks:
       Controversial/Superglobals:
         enabled: false # allow $GLOBALS in getGlobal(), $_SERVER in __construct()
       Design/ExitExpression:
         enabled: false # allow exit in redirect()
-      ExcessiveClassComplexity:
-        enabled: true
-        maximum: 55
   phan:
     enabled: true
     checks:
