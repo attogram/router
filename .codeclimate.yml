@@ -43,10 +43,10 @@ plugins:
     checks:
       php:S1448: # number of methods in class
        enabled: true
-       threshold: 25
+       maximum: 25
       php:S1192: # Define a constant instead of duplicating literal
         enabled: true
-        threshold: 4
+        maximum: 4
   duplication:
     enabled: true
     config:
