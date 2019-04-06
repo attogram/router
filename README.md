@@ -66,7 +66,7 @@ if (!$control) {
 // Now dispatch based on $control, in whatever manner you wish
 ```
 
-## Functions
+## Public Functions
 
 ### allow
 
