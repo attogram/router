@@ -41,10 +41,13 @@ plugins:
     config:
       minimum_severity: major # info, minor, major (default), critical, blocker
     checks:
+      # rule.php.S1448.param.maximumMethodThreshold=The maximum number of methods
+      # rule.php.S1448.param.countNonpublicMethods=Whether or not to include non-public methods in the count
       php:S1448: # number of methods in class
         enabled: true
-        maximumMethodThreshold: 25
-        countNonpublicMethods: true
+        param:
+          maximumMethodThreshold: 25
+          countNonpublicMethods: true
       php:S1192: # Define a constant instead of duplicating literal
         enabled: true
         threshold: 4
