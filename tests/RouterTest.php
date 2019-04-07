@@ -16,6 +16,7 @@ class RouterTest extends TestCase
     public function testConstruct()
     {
         $this->localSetUp();
+        self::assertTrue(class_exists('Attogram\Router\Router'));
         $router = new Router();
         self::assertInstanceOf(Router::class, $router);
         self::assertClassHasAttribute('control', Router::class);
@@ -67,6 +68,7 @@ class RouterTest extends TestCase
         $this->localSetUp();
         $router = new Router();
         self::assertEquals(null, $router->match());
+        $this->assertVarsAreNull($router);
     }
 
     public function testExactMatchFound()
@@ -76,6 +78,7 @@ class RouterTest extends TestCase
         $router = new Router();
         $router->allow('/exact/match', 'passed');
         self::assertEquals('passed', $router->match());
+        $this->assertVarsAreNull($router);
     }
 
     public function testExactMatchNotFound()
@@ -85,6 +88,32 @@ class RouterTest extends TestCase
         $router = new Router();
         $router->allow('/exact/match', 'failed');
         self::assertEquals(null, $router->match());
+        $this->assertVarsAreNull($router);
+    }
+
+    public function testExactMatchLastFound()
+    {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/exact/';
+        $router = new Router();
+        $router->allow('/a', 'failed');
+        $router->allow('/b', 'failed');
+        $router->allow('/c', 'failed');
+        $router->allow('/d', 'failed');
+        $router->allow('/e', 'failed');
+        $router->allow('/f', 'failed');
+        $router->allow('/g', 'failed');
+        $router->allow('/h', 'failed');
+        $router->allow('/i', 'failed');
+        $router->allow('/j', 'failed');
+        $router->allow('/ex', 'failed');
+        $router->allow('/exa', 'failed');
+        $router->allow('/exac', 'failed');
+        $router->allow('/exactl', 'failed');
+        $router->allow('/exactly', 'failed');
+        $router->allow('/exact', 'passed');
+        self::assertEquals('passed', $router->match());
+        $this->assertVarsAreNull($router);
     }
 
     public function testVariableMatchFound()
@@ -96,11 +125,95 @@ class RouterTest extends TestCase
         self::assertEquals('passed', $router->match());
         self::assertEquals('foo', $router->getVar());
         self::assertEquals('foo', $router->getVar(0));
-        self::assertEquals(null, $router->getVar(1));
-        self::assertEquals(null, $router->getVar(2));
-        self::assertEquals(null, $router->getVar(3));
-        self::assertEquals(null, $router->getVar(4));
-        self::assertEquals(null, $router->getVar(5));
+        $this->assertVarsAreNull($router, 1);
+    }
+
+    public function testVariableMatchFoundTwo()
+    {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar';
+        $router = new Router();
+        $router->allow('/variable/?/?', 'passed');
+        self::assertEquals('passed', $router->match());
+        self::assertEquals('foo', $router->getVar());
+        self::assertEquals('foo', $router->getVar(0));
+        self::assertEquals('bar', $router->getVar(1));
+        $this->assertVarsAreNull($router, 2);
+    }
+
+    public function testVariableMatchFoundThree()
+    {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar/alpha';
+        $router = new Router();
+        $router->allow('/variable/?/?/?', 'passed');
+        self::assertEquals('passed', $router->match());
+        self::assertEquals('foo', $router->getVar());
+        self::assertEquals('foo', $router->getVar(0));
+        self::assertEquals('bar', $router->getVar(1));
+        self::assertEquals('alpha', $router->getVar(2));
+        $this->assertVarsAreNull($router, 3);
+    }
+
+    public function testVariableMatchFoundFour()
+    {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar/alpha/beta';
+        $router = new Router();
+        $router->allow('/variable/?/?/?/?', 'passed');
+        self::assertEquals('passed', $router->match());
+        self::assertEquals('foo', $router->getVar());
+        self::assertEquals('foo', $router->getVar(0));
+        self::assertEquals('bar', $router->getVar(1));
+        self::assertEquals('alpha', $router->getVar(2));
+        self::assertEquals('beta', $router->getVar(3));
+        $this->assertVarsAreNull($router, 4);
+    }
+
+    public function testVariableMatchFoundFive()
+    {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar/alpha/beta/omega';
+        $router = new Router();
+        $router->allow('/variable/?/?/?/?/?', 'passed');
+        self::assertEquals('passed', $router->match());
+        self::assertEquals('foo', $router->getVar());
+        self::assertEquals('foo', $router->getVar(0));
+        self::assertEquals('bar', $router->getVar(1));
+        self::assertEquals('alpha', $router->getVar(2));
+        self::assertEquals('beta', $router->getVar(3));
+        self::assertEquals('omega', $router->getVar(4));
+        $this->assertVarsAreNull($router, 5);
+    }
+
+    public function testVariableMatchLastFound()
+    {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/';
+        $router = new Router();
+        $router->allow('/a/?', 'failed');
+        $router->allow('/b/?', 'failed');
+        $router->allow('/c/?', 'failed');
+        $router->allow('/d/?', 'failed');
+        $router->allow('/e/?', 'failed');
+        $router->allow('/f/?', 'failed');
+        $router->allow('/g/?', 'failed');
+        $router->allow('/h/?', 'failed');
+        $router->allow('/i/?', 'failed');
+        $router->allow('/j/?', 'failed');
+        $router->allow('/v/?', 'failed');
+        $router->allow('/va/?', 'failed');
+        $router->allow('/var/?', 'failed');
+        $router->allow('/vari/?', 'failed');
+        $router->allow('/varia/?', 'failed');
+        $router->allow('/variab/?', 'failed');
+        $router->allow('/variabl/?', 'failed');
+        $router->allow('/variables/?', 'failed');
+        $router->allow('/variable/?', 'passed');
+        self::assertEquals('passed', $router->match());
+        self::assertEquals('foo', $router->getVar());
+        self::assertEquals('foo', $router->getVar(0));
+        $this->assertVarsAreNull($router, 1);
     }
 
     public function testVariableMatchNotFound()
@@ -109,13 +222,23 @@ class RouterTest extends TestCase
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/not/found';
         $router = new Router();
         $router->allow('/variable/?', 'failed');
-        self::assertEquals(null, $router->match());
-        self::assertEquals(null, $router->getVar());
-        self::assertEquals(null, $router->getVar(0));
-        self::assertEquals(null, $router->getVar(1));
-        self::assertEquals(null, $router->getVar(2));
-        self::assertEquals(null, $router->getVar(3));
-        self::assertEquals(null, $router->getVar(4));
-        self::assertEquals(null, $router->getVar(5));
+        $this->assertVarsAreNull($router);
+    }
+
+    /**
+     * @param Router $router
+     * @param int $nullsAfterIndex
+     */
+    public function assertVarsAreNull(Router $router, int $nullsFromIndex = 0)
+    {
+        for ($index = 0; $index < 100; $index++) {
+            if ($index < $nullsFromIndex) {
+                continue;
+            }
+            if ($index === 0) {
+                self::assertEquals(null, $router->getVar());
+            }
+            self::assertEquals(null, $router->getVar($index));
+        }
     }
 }
