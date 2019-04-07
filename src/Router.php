@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.4-pre.0';
+    const VERSION = '4.0.4-pre.1';
 
     private $control        = null;
     private $forceSlash     = false;
@@ -290,12 +290,14 @@ class Router
      *
      * @param string $url
      * @param int $httpResponseCode
+     * @param bool $exitAfter - default: true
      */
-    public function redirect(string $url, int $httpResponseCode = 301)
+    public function redirect(string $url, int $httpResponseCode = 301, bool $exitAfter = true)
     {
         header('Location: ' . $url, true, $httpResponseCode);
-
-        exit; // After a redirect, we must exit to halt any further script execution
+        if ($exitAfter) {
+            exit; // After a redirect, we must exit to halt any further script execution
+        }
     }
 
     /**
