@@ -45,22 +45,22 @@ class RouterTest extends TestCase
         self::assertTrue(method_exists($router, 'match'));
         self::assertNull($router->match());
         self::assertTrue(method_exists($router, 'getCurrent'));
-        self::assertIsString($router->getCurrent());
+        self::assertTrue(is_string($router->getCurrent()));
         self::assertTrue(method_exists($router, 'getCurrentFull'));
-        self::assertIsString($router->getCurrentFull());
+        self::assertTrue(is_string($router->getCurrentFull()));
         self::assertTrue(method_exists($router, 'getGet'));
         self::assertIsArray($router->getGet());
         self::assertEmpty($router->getGet('foobar'));
         self::assertTrue(method_exists($router, 'getHome'));
-        self::assertIsString($router->getHome());
+        self::assertTrue(is_string($router->getHome()));
         self::assertTrue(method_exists($router, 'getHomeFull'));
-        self::assertIsString($router->getHomeFull());
+        self::assertTrue(is_string($router->getHomeFull()));
         self::assertTrue(method_exists($router, 'getHost'));
-        self::assertIsString($router->getHost());
+        self::assertTrue(is_string($router->getHost()));
         self::assertTrue(method_exists($router, 'getHostFull'));
-        self::assertIsString($router->getHostFull());
+        self::assertTrue(is_string($router->getHostFull()));
         self::assertTrue(method_exists($router, 'getProtocol'));
-        self::assertIsString($router->getProtocol());
+        self::assertTrue(is_string($router->getProtocol()));
         self::assertTrue(in_array($router->getProtocol(), ['http', 'https']));
         self::assertTrue(method_exists($router, 'getServer'));
         self::assertIsArray($router->getServer());
@@ -76,7 +76,7 @@ class RouterTest extends TestCase
 
     public function testSemanticVersion()
     {
-        self::assertIsString(Router::VERSION);
+        self::assertTrue(is_string(Router::VERSION));
         self::assertGreaterThanOrEqual(
             1,
             preg_match(
