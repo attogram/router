@@ -63,7 +63,7 @@ class RouterTest extends TestCase
         self::assertTrue(is_string($router->getProtocol()));
         self::assertTrue(in_array($router->getProtocol(), ['http', 'https']));
         self::assertTrue(method_exists($router, 'getServer'));
-        self::assertIsArray($router->getServer());
+        self::assertTrue(is_array($router->getServer()));
         self::assertEmpty($router->getServer('FOOBAR'));
         self::assertTrue(method_exists($router, 'getVar'));
         $this->assertVarsAreNull($router);
