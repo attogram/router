@@ -29,16 +29,16 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.2';
+    const VERSION = '4.0.3-pre.1';
 
     private $control        = null;
     private $forceSlash     = false;
     private $routesExact    = [];
     private $routesVariable = [];
-    private $uriBase        = '';
-    private $uriRelative    = '';
     private $uri            = [];
+    private $uriBase        = '';
     private $uriCount       = 0;
+    private $uriRelative    = '';
     private $vars           = [];
 
     /**
