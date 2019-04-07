@@ -21,5 +21,4 @@ script:
   - if find src/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
   - if find tests/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
   - if find vendor/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
-  - if [$TRAVIS_PHP_VERSION == "7.0"]; then composer require phpunit/phpunit "^6.0"; else composer require phpunit/phpunit "^7.0"; fi
-  - vendor/bin/phpunit tests/RouterTest.php
+  - phpunit tests/RouterTest.php
