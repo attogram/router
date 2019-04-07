@@ -1,5 +1,8 @@
 # Attogram Router Future Development
 
-* create Test Suite in ./tests
-* new functions
-  * sendHeaders(404)
+* Tests or all public functions
+
+* update redirect($url, $responseCode = '301', $exitAfterRedirect = true)
+
+* new function: sendHeaders(404)
+
