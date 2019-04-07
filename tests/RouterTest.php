@@ -366,7 +366,7 @@ class RouterTest extends TestCase
         $router = $this->getRouter();
         self::assertEquals($_GET, $router->getGet());
         self::assertEquals('bar', $router->getGet('foo'));
-        self::assertEquals('', $router->getGet('not.foo'));
+        self::assertNull($router->getGet('not.foo'));
     }
 
     public function testGetServer() {
@@ -383,8 +383,9 @@ class RouterTest extends TestCase
         );
         $GLOBALS['_SERVER']['QUERY_STRING'] = 'a=b';
         self::assertEquals($_SERVER['QUERY_STRING'], $router->getServer('QUERY_STRING'));
-        self::assertEquals('', $router->getServer('NOT_FOUND'));
         unset($GLOBALS['_SERVER']['QUERY_STRING']);
+        self::assertNull($router->getServer('NOT_FOUND'));
+
     }
 
     /**
