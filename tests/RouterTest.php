@@ -6,10 +6,10 @@ use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
         require __DIR__ . '/../vendor/autoload.php';
-
         $GLOBALS['_SERVER']['SCRIPT_NAME'] = '/index.php';
     }
 
