@@ -227,7 +227,7 @@ class RouterTest extends TestCase
 
     /**
      * @param Router $router
-     * @param int $nullsAfterIndex
+     * @param int $nullsFromIndex
      */
     public function assertVarsAreNull(Router $router, int $nullsFromIndex = 0)
     {
@@ -357,11 +357,36 @@ class RouterTest extends TestCase
         self::assertEquals('https://foo.bar:8080', $router->getHostFull());
     }
 
+    public function testGetGet() {
+        $this->localSetUp();
+        $GLOBALS['_GET']['foo'] = 'bar';
+        $router = new Router();
+        self::assertEquals($_GET, $router->getGet());
+        self::assertEquals('bar', $router->getGet('foo'));
+        self::assertEquals('', $router->getGet('not.foo'));
+    }
+
+    public function testGetServer() {
+        $this->localSetUp();
+        $router = new Router();
+        self::assertEquals($_SERVER, $router->getServer());
+        self::assertEquals($_SERVER['REQUEST_URI'], $router->getServer('REQUEST_URI'));
+        self::assertEquals($_SERVER['SCRIPT_NAME'], $router->getServer('SCRIPT_NAME'));
+        self::assertEquals($_SERVER['SERVER_NAME'], $router->getServer('SERVER_NAME'));
+        self::assertEquals($_SERVER['HTTPS'], $router->getServer('HTTPS'));
+        self::assertEquals($_SERVER['SERVER_PORT'], $router->getServer('SERVER_PORT'));
+        self::assertEquals(
+            isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '',
+            $router->getServer('QUERY_STRING')
+        );
+        $GLOBALS['_SERVER']['QUERY_STRING'] = 'a=b';
+        self::assertEquals($_SERVER['QUERY_STRING'], $router->getServer('QUERY_STRING'));
+        self::assertEquals('', $router->getServer('NOT_FOUND'));
+    }
+
 //    public function testGetHome() {}
 //    public function testGetHomeFull() {}
 //    public function testGetCurrent() {}
 //    public function testGetCurrentFull() {}
-//    public function testGetGet() {}
-//    public function testGetServer() {}
 //    public function testRedirect() {}
 }
