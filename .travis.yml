@@ -1,21 +1,18 @@
 # Attogram Router - https://github.com/attogram/router
 # Travis CI - https://travis-ci.org/attogram/router
-#
-
 language: php
-
 php:
-  - 7.0
-  - 7.1
-  - 7.2
-  - 7.3
-  
+  - '7.0'
+  - '7.1'
+  - '7.2'
+  - '7.3'
+  - nightly
 matrix:
+  allow_failures:
+    - php: nightly
   fast_finish: true
-
 before_script:
   - composer install
-
 script:
   - if find examples/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
   - if find src/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
