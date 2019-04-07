@@ -1,10 +1,12 @@
 # Attogram Router - https://github.com/attogram/router
-# codeclimate checks - https://codeclimate.com/github/attogram/router
+# Code Climate - https://codeclimate.com/github/attogram/router
 #
+
 version: "2"
 exclude_patterns:
-- "vendor/"
 - "examples/"
+- "tests/"
+- "vendor/"
 checks:
   method-complexity:
     config:
@@ -48,7 +50,6 @@ plugins:
 #        param:
 #          maximumMethodThreshold: 25
 #          countNonpublicMethods: true
-
   duplication:
     enabled: true
     config:
