@@ -382,11 +382,32 @@ class RouterTest extends TestCase
         $GLOBALS['_SERVER']['QUERY_STRING'] = 'a=b';
         self::assertEquals($_SERVER['QUERY_STRING'], $router->getServer('QUERY_STRING'));
         self::assertEquals('', $router->getServer('NOT_FOUND'));
+        unset($GLOBALS['_SERVER']['QUERY_STRING']);
     }
+
 
 //    public function testGetHome() {}
 //    public function testGetHomeFull() {}
 //    public function testGetCurrent() {}
 //    public function testGetCurrentFull() {}
-//    public function testRedirect() {}
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testRedirect() {
+        $this->localSetUp();
+        $router = new Router();
+        $router->redirect('/redirected', 301);
+        self::assertTrue(true);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testRedirectNoExit() {
+        $this->localSetUp();
+        $router = new Router();
+        $router->redirect('/redirected', 301, false);
+        self::assertTrue(true);
+    }
 }

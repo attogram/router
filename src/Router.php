@@ -227,6 +227,22 @@ class Router
     }
 
     /**
+     * Redirect to a new URL, and exit
+     *  - optionally set HTTP Response Code (301 = Moved Permanently, 302 = Found)
+     *
+     * @param string $url
+     * @param int $httpResponseCode
+     * @param bool $exitAfter - default: true
+     */
+    public function redirect(string $url, int $httpResponseCode = 301, bool $exitAfter = true)
+    {
+        header('Location: ' . $url, true, $httpResponseCode);
+        if ($exitAfter) {
+            exit; // After a redirect, we must exit to halt any further script execution
+        }
+    }
+
+    /**
      * get a value from the global _GET array, or the whole _GET array
      *
      * @param string $name
@@ -282,22 +298,6 @@ class Router
             $url .= '?' . $queryString;
         }
         $this->redirect($url);
-    }
-
-    /**
-     * Redirect to a new URL, and exit
-     *  - optionally set HTTP Response Code (301 = Moved Permanently, 302 = Found)
-     *
-     * @param string $url
-     * @param int $httpResponseCode
-     * @param bool $exitAfter - default: true
-     */
-    public function redirect(string $url, int $httpResponseCode = 301, bool $exitAfter = true)
-    {
-        header('Location: ' . $url, true, $httpResponseCode);
-        if ($exitAfter) {
-            exit; // After a redirect, we must exit to halt any further script execution
-        }
     }
 
     /**

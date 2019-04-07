@@ -133,7 +133,7 @@ if (!$control) {
 
 ### redirect
 
-`public function redirect(string $url, int $httpResponseCode = 301)`
+`redirect(string $url, int $httpResponseCode = 301, bool $exitAfter = true)`
 
 * Redirect to a new url and exit
 * optionally set a response code (301 = permanent, 302 = moved)
