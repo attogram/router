@@ -1,4 +1,5 @@
 # Attogram Router Future Development
 
+* Full Documentation
 * Tests or all public functions
-* new function: sendHeaders(404)
+* new helper function: sendHeaders(404)
