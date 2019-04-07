@@ -241,4 +241,127 @@ class RouterTest extends TestCase
             self::assertEquals(null, $router->getVar($index));
         }
     }
+
+    public function testGetProtocolHttpsOn443() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['HTTPS'] = 'on';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
+        $router = new Router();
+        self::assertEquals('https', $router->getProtocol());
+    }
+
+    public function testGetProtocolHttps443() {
+        $this->localSetUp();
+        unset($GLOBALS['_SERVER']['HTTPS']);
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
+        $router = new Router();
+        self::assertEquals('https', $router->getProtocol());
+    }
+
+    public function testGetProtocolHttp80() {
+        $this->localSetUp();
+        unset($GLOBALS['_SERVER']['HTTPS']);
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $router = new Router();
+        self::assertEquals('http', $router->getProtocol());
+    }
+
+    public function testGetProtocolHttpsOff80() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $router = new Router();
+        self::assertEquals('http', $router->getProtocol());
+    }
+
+    public function testGetProtocolHttp8080() {
+        $this->localSetUp();
+        unset($GLOBALS['_SERVER']['HTTPS']);
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
+        $router = new Router();
+        self::assertEquals('http', $router->getProtocol());
+    }
+
+    public function testGetProtocolHttps8080() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['HTTPS'] = 'on';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
+        $router = new Router();
+        self::assertEquals('https', $router->getProtocol());
+    }
+
+    public function testGetHost80() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $router = new Router();
+        self::assertEquals('foo.bar', $router->getHost());
+    }
+
+    public function testGetHostFull80() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        unset($GLOBALS['_SERVER']['HTTPS']);
+        $router = new Router();
+        self::assertEquals('http://foo.bar', $router->getHostFull());
+    }
+
+    public function testGetHost443() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'secure.foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
+        $router = new Router();
+        self::assertEquals('secure.foo.bar', $router->getHost());
+    }
+
+    public function testGetHostFull443() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'secure.foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
+        unset($GLOBALS['_SERVER']['HTTPS']);
+        $router = new Router();
+        self::assertEquals('https://secure.foo.bar', $router->getHostFull());
+    }
+
+    public function testGetHostFullHttpsOff() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'secure.foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $router = new Router();
+        self::assertEquals('http://secure.foo.bar', $router->getHostFull());
+    }
+
+    public function testGetHost8080() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
+        $router = new Router();
+        self::assertEquals('foo.bar:8080', $router->getHost());
+    }
+
+    public function testGetHostFull8080() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
+        $router = new Router();
+        self::assertEquals('http://foo.bar:8080', $router->getHostFull());
+    }
+
+    public function testGetHostFull8080HttpsOn() {
+        $this->localSetUp();
+        $GLOBALS['_SERVER']['HTTPS'] = 'on';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
+        $router = new Router();
+        self::assertEquals('https://foo.bar:8080', $router->getHostFull());
+    }
+
+//    public function testGetHome() {}
+//    public function testGetHomeFull() {}
+//    public function testGetCurrent() {}
+//    public function testGetCurrentFull() {}
+//    public function testGetGet() {}
+//    public function testGetServer() {}
+//    public function testRedirect() {}
 }
