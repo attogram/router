@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.0.3';
+    const VERSION = '4.0.4-pre.0';
 
     private $control        = null;
     private $forceSlash     = false;
@@ -100,11 +100,11 @@ class Router
         }
         // Single Question Mark denotes a variable routing
         if (in_array('?', $routeUri)) {
-            $this->routesVariable[$route] = ['c' => $control, 'uri' => $routeUri]; // add variable route
+            $this->routesVariable[$route] = ['c' => $control, 'u' => $routeUri]; // add variable route
 
             return; // Variable route found
         }
-        $this->routesExact[$route] = ['c' => $control, 'uri' => $routeUri]; // add exact route
+        $this->routesExact[$route] = ['c' => $control, 'u' => $routeUri]; // add exact route
     }
 
     /**
@@ -305,7 +305,7 @@ class Router
     private function matchExact(): bool
     {
         foreach ($this->routesExact as $route) {
-            if ($this->uri === $route['uri']) { // compare the current URI array to this route URI array
+            if ($this->uri === $route['u']) { // compare the current URI array to this route URI array
                 $this->control = $route['c']; // set control or this exact match
 
                 return true; // exact match found
@@ -322,7 +322,7 @@ class Router
     private function matchVariable(): bool
     {
         foreach ($this->routesVariable as $route) {
-            $this->matchVariableVars($route['uri']); // find variables
+            $this->matchVariableVars($route['u']); // find variables
             if (empty($this->vars)) {
                 continue; // no variable match yet
             }
