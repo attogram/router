@@ -6,15 +6,16 @@ use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-    protected function setUp()
+    public function localSetUp()
     {
         parent::setUp();
-        require __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
         $GLOBALS['_SERVER']['SCRIPT_NAME'] = '/index.php';
     }
 
     public function testConstruct()
     {
+        $this->localSetUp();
         $router = new Router();
         self::assertInstanceOf(Router::class, $router);
         self::assertClassHasAttribute('control', Router::class);
@@ -44,6 +45,7 @@ class RouterTest extends TestCase
 
     public function testSemanticVersion()
     {
+        $this->localSetUp();
         self::assertEquals(true, is_string(Router::VERSION));
         self::assertGreaterThanOrEqual(
             1,
@@ -62,12 +64,14 @@ class RouterTest extends TestCase
 
     public function testMatchNoRoutes()
     {
+        $this->localSetUp();
         $router = new Router();
         self::assertEquals(null, $router->match());
     }
 
     public function testExactMatchFound()
     {
+        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/exact/match/';
         $router = new Router();
         $router->allow('/exact/match', 'passed');
@@ -76,6 +80,7 @@ class RouterTest extends TestCase
 
     public function testExactMatchNotFound()
     {
+        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/not/found';
         $router = new Router();
         $router->allow('/exact/match', 'failed');
@@ -84,6 +89,7 @@ class RouterTest extends TestCase
 
     public function testVariableMatchFound()
     {
+        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo';
         $router = new Router();
         $router->allow('/variable/?', 'passed');
@@ -99,6 +105,7 @@ class RouterTest extends TestCase
 
     public function testVariableMatchNotFound()
     {
+        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/not/found';
         $router = new Router();
         $router->allow('/variable/?', 'failed');
