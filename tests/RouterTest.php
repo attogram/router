@@ -406,8 +406,55 @@ class RouterTest extends TestCase
         self::assertTrue(true);
     }
 
-//    public function testGetHome() {}
-//    public function testGetHomeFull() {}
-//    public function testGetCurrent() {}
-//    public function testGetCurrentFull() {}
+    public function testGetHome() {
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $router = $this->getRouter();
+        self::assertEquals('/', $router->getHome());
+    }
+
+    public function testGetHomeFull() {
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $router = $this->getRouter();
+        self::assertEquals('http://foo.bar/', $router->getHomeFull());
+    }
+
+    public function testGetCurrent() {
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/current/url';
+        $router = $this->getRouter();
+        self::assertEquals('/current/url', $router->getCurrent());
+    }
+
+    public function testGetCurrentSlash() {
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/current/url/';
+        $router = $this->getRouter();
+        self::assertEquals('/current/url/', $router->getCurrent());
+    }
+
+    public function testGetCurrentFull() {
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/current/url';
+        $router = $this->getRouter();
+        self::assertEquals('http://foo.bar/current/url', $router->getCurrentFull());
+    }
+
+    public function testGetCurrentFullSlash() {
+        $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
+        $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
+        $GLOBALS['_SERVER']['HTTPS'] = 'off';
+        $GLOBALS['_SERVER']['REQUEST_URI'] = '/current/url/';
+        $router = $this->getRouter();
+        self::assertEquals('http://foo.bar/current/url/', $router->getCurrentFull());
+    }
 }

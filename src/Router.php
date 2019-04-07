@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.1.0';
+    const VERSION = '4.1.1-pre.1';
 
     private $control        = null;
     private $forceSlash     = false;
@@ -206,7 +206,7 @@ class Router
     }
 
     /**
-     * set Force a trailing slash on all requests?
+     * Force a trailing slash on all requests?  Occurs in match()
      *
      * @param bool $forceSlash
      */
