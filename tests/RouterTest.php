@@ -44,7 +44,7 @@ class RouterTest extends TestCase
 
     public function testSemanticVersion()
     {
-        self::assertIsString(Router::VERSION);
+        self::assertEquals(true, is_string(Router::VERSION));
         self::assertGreaterThanOrEqual(
             1,
             preg_match(
