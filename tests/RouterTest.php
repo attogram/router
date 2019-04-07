@@ -49,7 +49,7 @@ class RouterTest extends TestCase
         self::assertTrue(method_exists($router, 'getCurrentFull'));
         self::assertTrue(is_string($router->getCurrentFull()));
         self::assertTrue(method_exists($router, 'getGet'));
-        self::assertIsArray($router->getGet());
+        self::assertTrue(is_array($router->getGet()));
         self::assertEmpty($router->getGet('foobar'));
         self::assertTrue(method_exists($router, 'getHome'));
         self::assertTrue(is_string($router->getHome()));
