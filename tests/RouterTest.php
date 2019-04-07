@@ -6,19 +6,18 @@ use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-    public function localSetUp()
+    public function getRouter()
     {
         parent::setUp();
         require_once __DIR__ . '/../vendor/autoload.php';
         $GLOBALS['_SERVER']['SCRIPT_NAME'] = '/index.php';
+        self::assertTrue(class_exists('Attogram\Router\Router'));
+        return new Router();
     }
 
     public function testConstruct()
     {
-        $this->localSetUp();
-        self::assertTrue(class_exists('Attogram\Router\Router'));
-        $router = new Router();
-        self::assertInstanceOf(Router::class, $router);
+        $router = $this->getRouter();
         self::assertClassHasAttribute('control', Router::class);
         self::assertClassHasAttribute('forceSlash', Router::class);
         self::assertClassHasAttribute('routesExact', Router::class);
@@ -28,26 +27,56 @@ class RouterTest extends TestCase
         self::assertClassHasAttribute('uriCount', Router::class);
         self::assertClassHasAttribute('uriRelative', Router::class);
         self::assertClassHasAttribute('vars', Router::class);
+        self::assertInstanceOf(Router::class, $router);
         self::assertTrue(method_exists($router, 'allow'));
-        self::assertTrue(method_exists($router, 'getCurrent'));
-        self::assertTrue(method_exists($router, 'getCurrentFull'));
-        self::assertTrue(method_exists($router, 'getGet'));
-        self::assertTrue(method_exists($router, 'getHome'));
-        self::assertTrue(method_exists($router, 'getHomeFull'));
-        self::assertTrue(method_exists($router, 'getHost'));
-        self::assertTrue(method_exists($router, 'getHostFull'));
-        self::assertTrue(method_exists($router, 'getProtocol'));
-        self::assertTrue(method_exists($router, 'getServer'));
-        self::assertTrue(method_exists($router, 'getVar'));
+        self::assertNull($router->allow('/empty/string', ''));
+        self::assertNull($router->allow('/null', null));
+        self::assertNull($router->allow('/this', $this));
+        self::assertNull($router->allow('/0', (int) 0));
+        self::assertNull($router->allow('/a', (int) 1));
+        self::assertNull($router->allow('/b', (string) 'one'));
+        self::assertNull($router->allow('/c', (array) ['one']));
+        self::assertNull($router->allow('/d', (float) 3.141));
+        self::assertNull($router->allow('/e', (object) new stdClass()));
+        self::assertNull($router->allow('/f', function () { echo 'one'; }));
+        self::assertNull($router->allow('/g', (bool) true));
+        self::assertNull($router->allow('/h', (bool) false));
+        //self::assertNull($router->allow('', 'empty string'));
         self::assertTrue(method_exists($router, 'match'));
+        self::assertNull($router->match());
+        self::assertTrue(method_exists($router, 'getCurrent'));
+        self::assertIsString($router->getCurrent());
+        self::assertTrue(method_exists($router, 'getCurrentFull'));
+        self::assertIsString($router->getCurrentFull());
+        self::assertTrue(method_exists($router, 'getGet'));
+        self::assertIsArray($router->getGet());
+        self::assertEmpty($router->getGet('foobar'));
+        self::assertTrue(method_exists($router, 'getHome'));
+        self::assertIsString($router->getHome());
+        self::assertTrue(method_exists($router, 'getHomeFull'));
+        self::assertIsString($router->getHomeFull());
+        self::assertTrue(method_exists($router, 'getHost'));
+        self::assertIsString($router->getHost());
+        self::assertTrue(method_exists($router, 'getHostFull'));
+        self::assertIsString($router->getHostFull());
+        self::assertTrue(method_exists($router, 'getProtocol'));
+        self::assertIsString($router->getProtocol());
+        self::assertTrue(in_array($router->getProtocol(), ['http', 'https']));
+        self::assertTrue(method_exists($router, 'getServer'));
+        self::assertIsArray($router->getServer());
+        self::assertEmpty($router->getServer('FOOBAR'));
+        self::assertTrue(method_exists($router, 'getVar'));
+        $this->assertVarsAreNull($router);
         self::assertTrue(method_exists($router, 'redirect'));
         self::assertTrue(method_exists($router, 'setForceSlash'));
+        self::assertNull($router->setForceSlash(true));
+        self::assertNull($router->setForceSlash(false));
+
     }
 
     public function testSemanticVersion()
     {
-        $this->localSetUp();
-        self::assertEquals(true, is_string(Router::VERSION));
+        self::assertIsString(Router::VERSION);
         self::assertGreaterThanOrEqual(
             1,
             preg_match(
@@ -65,17 +94,15 @@ class RouterTest extends TestCase
 
     public function testMatchNoRoutes()
     {
-        $this->localSetUp();
-        $router = new Router();
-        self::assertEquals(null, $router->match());
+        $router = $this->getRouter();
+        self::assertNull($router->match());
         $this->assertVarsAreNull($router);
     }
 
     public function testExactMatchFound()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/exact/match/';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/exact/match', 'passed');
         self::assertEquals('passed', $router->match());
         $this->assertVarsAreNull($router);
@@ -83,19 +110,17 @@ class RouterTest extends TestCase
 
     public function testExactMatchNotFound()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/not/found';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/exact/match', 'failed');
-        self::assertEquals(null, $router->match());
+        self::assertNull($router->match());
         $this->assertVarsAreNull($router);
     }
 
     public function testExactMatchLastFound()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/exact/';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/a', 'failed');
         $router->allow('/b', 'failed');
         $router->allow('/c', 'failed');
@@ -118,9 +143,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchFound()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/variable/?', 'passed');
         self::assertEquals('passed', $router->match());
         self::assertEquals('foo', $router->getVar());
@@ -130,9 +154,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchFoundTwo()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/variable/?/?', 'passed');
         self::assertEquals('passed', $router->match());
         self::assertEquals('foo', $router->getVar());
@@ -143,9 +166,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchFoundThree()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar/alpha';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/variable/?/?/?', 'passed');
         self::assertEquals('passed', $router->match());
         self::assertEquals('foo', $router->getVar());
@@ -157,9 +179,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchFoundFour()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar/alpha/beta';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/variable/?/?/?/?', 'passed');
         self::assertEquals('passed', $router->match());
         self::assertEquals('foo', $router->getVar());
@@ -172,9 +193,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchFoundFive()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/bar/alpha/beta/omega';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/variable/?/?/?/?/?', 'passed');
         self::assertEquals('passed', $router->match());
         self::assertEquals('foo', $router->getVar());
@@ -188,9 +208,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchLastFound()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/variable/foo/';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/a/?', 'failed');
         $router->allow('/b/?', 'failed');
         $router->allow('/c/?', 'failed');
@@ -218,9 +237,8 @@ class RouterTest extends TestCase
 
     public function testVariableMatchNotFound()
     {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['REQUEST_URI'] = '/not/found';
-        $router = new Router();
+        $router = $this->getRouter();
         $router->allow('/variable/?', 'failed');
         $this->assertVarsAreNull($router);
     }
@@ -236,139 +254,123 @@ class RouterTest extends TestCase
                 continue;
             }
             if ($index === 0) {
-                self::assertEquals(null, $router->getVar());
+                self::assertNull($router->getVar());
             }
-            self::assertEquals(null, $router->getVar($index));
+            self::assertNull($router->getVar($index));
         }
     }
 
     public function testGetProtocolHttpsOn443() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['HTTPS'] = 'on';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('https', $router->getProtocol());
     }
 
     public function testGetProtocolHttps443() {
-        $this->localSetUp();
         unset($GLOBALS['_SERVER']['HTTPS']);
         $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('https', $router->getProtocol());
     }
 
     public function testGetProtocolHttp80() {
-        $this->localSetUp();
         unset($GLOBALS['_SERVER']['HTTPS']);
         $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('http', $router->getProtocol());
     }
 
     public function testGetProtocolHttpsOff80() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['HTTPS'] = 'off';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('http', $router->getProtocol());
     }
 
     public function testGetProtocolHttp8080() {
-        $this->localSetUp();
         unset($GLOBALS['_SERVER']['HTTPS']);
         $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('http', $router->getProtocol());
     }
 
     public function testGetProtocolHttps8080() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['HTTPS'] = 'on';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('https', $router->getProtocol());
     }
 
     public function testGetHost80() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('foo.bar', $router->getHost());
     }
 
     public function testGetHostFull80() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
         unset($GLOBALS['_SERVER']['HTTPS']);
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('http://foo.bar', $router->getHostFull());
     }
 
     public function testGetHost443() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'secure.foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('secure.foo.bar', $router->getHost());
     }
 
     public function testGetHostFull443() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'secure.foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 443;
         unset($GLOBALS['_SERVER']['HTTPS']);
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('https://secure.foo.bar', $router->getHostFull());
     }
 
     public function testGetHostFullHttpsOff() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'secure.foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 80;
         $GLOBALS['_SERVER']['HTTPS'] = 'off';
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('http://secure.foo.bar', $router->getHostFull());
     }
 
     public function testGetHost8080() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('foo.bar:8080', $router->getHost());
     }
 
     public function testGetHostFull8080() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['SERVER_NAME'] = 'foo.bar';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('http://foo.bar:8080', $router->getHostFull());
     }
 
     public function testGetHostFull8080HttpsOn() {
-        $this->localSetUp();
         $GLOBALS['_SERVER']['HTTPS'] = 'on';
         $GLOBALS['_SERVER']['SERVER_PORT'] = 8080;
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals('https://foo.bar:8080', $router->getHostFull());
     }
 
     public function testGetGet() {
-        $this->localSetUp();
         $GLOBALS['_GET']['foo'] = 'bar';
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals($_GET, $router->getGet());
         self::assertEquals('bar', $router->getGet('foo'));
         self::assertEquals('', $router->getGet('not.foo'));
     }
 
     public function testGetServer() {
-        $this->localSetUp();
-        $router = new Router();
+        $router = $this->getRouter();
         self::assertEquals($_SERVER, $router->getServer());
         self::assertEquals($_SERVER['REQUEST_URI'], $router->getServer('REQUEST_URI'));
         self::assertEquals($_SERVER['SCRIPT_NAME'], $router->getServer('SCRIPT_NAME'));
@@ -385,29 +387,26 @@ class RouterTest extends TestCase
         unset($GLOBALS['_SERVER']['QUERY_STRING']);
     }
 
-
-//    public function testGetHome() {}
-//    public function testGetHomeFull() {}
-//    public function testGetCurrent() {}
-//    public function testGetCurrentFull() {}
-
     /**
      * @runInSeparateProcess
      */
     public function testRedirect() {
-        $this->localSetUp();
-        $router = new Router();
+        $router = $this->getRouter();
         $router->redirect('/redirected', 301);
-        self::assertTrue(true);
+        self::fail(); // should have exited already
     }
 
     /**
      * @runInSeparateProcess
      */
     public function testRedirectNoExit() {
-        $this->localSetUp();
-        $router = new Router();
+        $router = $this->getRouter();
         $router->redirect('/redirected', 301, false);
         self::assertTrue(true);
     }
+
+//    public function testGetHome() {}
+//    public function testGetHomeFull() {}
+//    public function testGetCurrent() {}
+//    public function testGetCurrentFull() {}
 }
