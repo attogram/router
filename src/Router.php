@@ -108,7 +108,7 @@ class Router
     }
 
     /**
-     * Get the matching control or the current request
+     * Get the matching control for the current request
      *      - optionally, force a trailing slash on current request
      *
      * @return mixed|null
