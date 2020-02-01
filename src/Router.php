@@ -29,7 +29,7 @@ use function strtr;
  */
 class Router
 {
-    const VERSION = '4.1.1-pre.1';
+    const VERSION = '4.1.2';
 
     private $control        = null;
     private $forceSlash     = false;
@@ -254,13 +254,24 @@ class Router
     }
 
     /**
+     * get a value from the global _POST array, or the whole _POST array
+     *
+     * @param string $name
+     * @return array|string
+     */
+    public function getPost(string $name = '')
+    {
+        return $this->getGlobal('_POST', $name);
+    }
+
+    /**
      * get a value from a global array, or the whole global array
      *
      * @param string $global
      * @param string $name
      * @return array|null|string
      */
-    private function getGlobal(string $global, string $name)
+    private function getGlobal(string $global, string $name = '')
     {
         if (!isset($GLOBALS[$global]) // Global does not exist
             || !is_array($GLOBALS[$global]) // Global is not an array
