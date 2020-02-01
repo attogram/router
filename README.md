@@ -142,13 +142,19 @@ if (!$control) {
 
 `public function getGet(string $name = '')`
 
-* Get a global _GET variable, or empty string if not found
+* Get a global `_GET` variable, or empty string if not found
+
+### getPost
+
+`public function getPost(string $name = '')`
+
+* Get a global `_POST` variable, or empty string if not found
 
 ### getServer
 
 `public function getServer(string $name = '')`
 
-* Get a global _SERVER variable, or empty string if not found
+* Get a global `_SERVER` variable, or empty string if not found
 
 ### getHost
 
