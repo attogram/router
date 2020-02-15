@@ -389,16 +389,16 @@ class RouterTest extends TestCase
     }
 
     /**
-     * @TEST-runInSeparateProcess
+     * @runInSeparateProcess
      */
-    public function testRedirect() {
-        $router = $this->getRouter();
-        $router->redirect('/redirected', 301);
-        self::fail(); // should have exited already
-    }
+    // public function testRedirect() {
+    //     $router = $this->getRouter();
+    //     $router->redirect('/redirected', 301);
+    //     self::fail(); // should have exited already
+    // }
 
     /**
-     * @TEST-runInSeparateProcess
+     * @runInSeparateProcess
      */
     public function testRedirectNoExit() {
         $router = $this->getRouter();
