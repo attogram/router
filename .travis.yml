@@ -6,6 +6,7 @@ php:
   - '7.1'
   - '7.2'
   - '7.3'
+  - '7.4'
   - nightly
 matrix:
   allow_failures:
@@ -15,7 +16,13 @@ before_script:
   - composer install
 script:
   - if find examples/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
-  - if find src/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
-  - if find tests/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
-  - if find vendor/ -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
-  - phpunit tests
+  - if find src/      -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
+  - if find tests/    -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
+  - if find vendor/   -name "*.php" -exec php -l {} 2>&1 \; | grep "error,"; then exit 1; fi;
+  - if [ $TRAVIS_PHP_VERSION == "7.0" ];     then composer require phpunit/phpunit ~6; fi
+  - if [ $TRAVIS_PHP_VERSION == "7.1" ];     then composer require phpunit/phpunit ~7; fi
+  - if [ $TRAVIS_PHP_VERSION == "7.2" ];     then composer require phpunit/phpunit ~8; fi
+  - if [ $TRAVIS_PHP_VERSION == "7.3" ];     then composer require phpunit/phpunit ~9; fi
+  - if [ $TRAVIS_PHP_VERSION == "7.4" ];     then composer require phpunit/phpunit ~9; fi
+  - if [ $TRAVIS_PHP_VERSION == "nightly" ]; then composer require phpunit/phpunit ~9; fi
+  - vendor/bin/phpunit tests;
