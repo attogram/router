@@ -389,7 +389,7 @@ class RouterTest extends TestCase
     }
 
     /**
-     * @runInSeparateProcess
+     * @TEST-runInSeparateProcess
      */
     public function testRedirect() {
         $router = $this->getRouter();
@@ -398,7 +398,7 @@ class RouterTest extends TestCase
     }
 
     /**
-     * @runInSeparateProcess
+     * @TEST-runInSeparateProcess
      */
     public function testRedirectNoExit() {
         $router = $this->getRouter();
