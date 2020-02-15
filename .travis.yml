@@ -21,4 +21,4 @@ script:
   - if [ $TRAVIS_PHP_VERSION == "7.2" ]; then composer require phpunit/phpunit ~8; fi
   - if [ $TRAVIS_PHP_VERSION == "7.3" ]; then composer require phpunit/phpunit ~9; fi
   - if [ $TRAVIS_PHP_VERSION == "7.4" ]; then composer require phpunit/phpunit ~9; fi
-  - vendor/bin/phpunit tests --debug;
+  - vendor/bin/phpunit tests;
