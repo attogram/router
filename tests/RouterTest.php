@@ -414,12 +414,13 @@ class RouterTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    // public function testRedirect()
-    // {
-    //     $router = $this->getRouter();
-    //     $router->redirect('/redirected', 301);
-    //     self::fail(); // should have exited already
-    // }
+    public function testRedirect()
+    {
+        // @TODO - fix testRedirect for PHP>=7.1 phpunit process isolation
+        //$router = $this->getRouter();
+        //$router->redirect('/redirected', 301);
+        //self::fail(); // should have exited already
+    }
 
     /**
      * @runInSeparateProcess
